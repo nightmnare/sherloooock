@@ -4,11 +4,11 @@
   height: 120px;
   width: 120px;
 
-  border: 1px solid transparentize($color: $primary-purple, $amount: 0.7);
+  border: 1px solid transparentize($color: $primary-green, $amount: 0.7);
   background-color: $background-color;
 
   .scan {
-    background-color: transparentize($color: $primary-purple, $amount: 0.9);
+    background-color: transparentize($color: $primary-green, $amount: 0.9);
     height: 100%;
     width: 0%;
     animation-name: scanning;
@@ -16,7 +16,7 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 
-    border-right: 2px solid $primary-purple;
+    border-right: 2px solid $primary-green;
   }
 
   @keyframes scanning {
@@ -59,25 +59,25 @@
 
     &:nth-of-type(4) {
       top: -30px;
-      background-color: transparentize($color: $primary-purple, $amount: 0.6);
+      background-color: transparentize($color: $primary-green, $amount: 0.6);
       animation-name: first-layer-animation;
     }
 
     &:nth-of-type(3) {
       top: -10px;
-      background-color: transparentize($color: $primary-purple, $amount: 0.5);
+      background-color: transparentize($color: $primary-green, $amount: 0.5);
       animation-name: second-layer-animation;
     }
 
     &:nth-of-type(2) {
       top: 10px;
-      background-color: transparentize($color: $primary-purple, $amount: 0.6);
+      background-color: transparentize($color: $primary-green, $amount: 0.6);
       animation-name: third-layer-animation;
     }
 
     &:nth-of-type(1) {
       top: 30px;
-      background-color: transparentize($color: $primary-purple, $amount: 0.8);
+      background-color: transparentize($color: $primary-green, $amount: 0.8);
       animation-name: fourth-layer-animation;
     }
   }

@@ -22,7 +22,7 @@
   }
 
   &.entry {
-    background-color: darken($color: $primary-purple, $amount: 35%);
+    background-color: darken($color: $primary-green, $amount: 35%);
     padding: $spacing-m;
 
     a {
@@ -31,7 +31,7 @@
   }
 
   .protocolName {
-    color: $primary-purple;
+    color: $primary-green;
   }
 }
 

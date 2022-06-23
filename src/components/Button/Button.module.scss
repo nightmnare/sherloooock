@@ -1,7 +1,7 @@
 @import "../../styles/variables";
 
 .button {
-  background-color: $primary-purple;
+  background-color: $primary-green;
   color: white;
   border: 3px solid black;
 
@@ -11,7 +11,7 @@
 
   &:hover:not(:disabled) {
     cursor: pointer;
-    background-color: darken($color: $primary-purple, $amount: 10%);
+    background-color: darken($color: $primary-green, $amount: 10%);
   }
 
   &.secondary {
@@ -38,7 +38,7 @@
     position: relative;
     background-color: $background-color;
     color: black;
-    border: 3px solid $primary-purple;
+    border: 3px solid $primary-green;
     min-width: 9rem;
 
     transition: 0.3s all ease;
@@ -63,7 +63,7 @@
     }
 
     &:hover {
-      background-color: $primary-purple;
+      background-color: $primary-green;
       .content {
         top: -15px;
         left: 10px;

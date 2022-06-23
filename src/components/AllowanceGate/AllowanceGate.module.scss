@@ -9,7 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: transparentize($color: $primary-purple, $amount: 0.4);
+    color: transparentize($color: $primary-green, $amount: 0.4);
 
     &.success {
       color: #00feb3;
@@ -33,7 +33,7 @@
 
     &:hover:not(:disabled) {
       &::after {
-        border-left: 13px solid darken($color: $primary-purple, $amount: 10%);
+        border-left: 13px solid darken($color: $primary-green, $amount: 10%);
       }
     }
   }
@@ -47,7 +47,7 @@
     height: 0;
 
     border-top: 26px solid transparent;
-    border-left: 13px solid $primary-purple;
+    border-left: 13px solid $primary-green;
     border-bottom: 26px solid transparent;
   }
 

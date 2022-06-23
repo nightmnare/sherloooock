@@ -25,7 +25,7 @@
     height: 80px;
     position: absolute;
 
-    background-image: linear-gradient(180deg, rgba(135, 22, 232, 0.72), hsla(0, 0%, 100%, 0));
+    background-image: linear-gradient(180deg, $primary-green, $background-color);
   }
 
   & .content {
@@ -55,13 +55,13 @@
       .links {
         a {
           svg {
-            fill: lighten($color: $primary-purple, $amount: 30%);
+            fill: lighten($color: $primary-green, $amount: 30%);
             transition: 0.2s all ease;
           }
 
           &:hover {
             svg {
-              fill: lighten($color: $primary-purple, $amount: 80%);
+              fill: lighten($color: $primary-green, $amount: 80%);
             }
           }
         }

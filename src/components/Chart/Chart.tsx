@@ -26,8 +26,8 @@ export const Chart: React.FC<Props> = ({
     <AreaChart width={width} height={height} data={data}>
       <defs>
         <linearGradient id="tvl" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#8414eC" stopOpacity={0.5} />
-          <stop offset="100%" stopColor="#8414eC" stopOpacity={0} />
+          <stop offset="0%" stopColor="#0fb338" stopOpacity={0.5} />
+          <stop offset="100%" stopColor="#13a30e" stopOpacity={0} />
         </linearGradient>
       </defs>
       <YAxis
@@ -45,7 +45,7 @@ export const Chart: React.FC<Props> = ({
         {...xAxisProps}
       />
       <Tooltip itemStyle={{ color: "#19032d" }} labelStyle={{ color: "gray" }} {...tooltipProps} />
-      <Area type={type} dataKey="value" stroke="#8414EC" fill="url(#tvl)" fillOpacity={1} isAnimationActive={true} />
+      <Area type={type} dataKey="value" stroke="#0fb338" fill="url(#tvl)" fillOpacity={1} isAnimationActive={true} />
     </AreaChart>
   )
 }

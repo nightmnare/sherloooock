@@ -25,5 +25,5 @@
   border: 0;
   border-bottom: 1px solid white;
   border-image-slice: 1;
-  border-image-source: linear-gradient(136.33deg, rgba(135, 22, 232, 0.28) 7.74%, rgba(254, 110, 153, 0) 98.49%);
+  border-image-source: linear-gradient(136.33deg, $primary-green, 7.74%, $secondary-green 98.49%);
 }

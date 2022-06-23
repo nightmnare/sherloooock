@@ -6,7 +6,7 @@
   .button {
     border: 3px solid black;
 
-    background-color: $primary-purple;
+    background-color: $primary-green;
     width: 180px;
 
     padding: $spacing-m;
@@ -14,17 +14,17 @@
     cursor: pointer;
 
     &:hover {
-      background-color: darken($color: $primary-purple, $amount: 10%);
+      background-color: darken($color: $primary-green, $amount: 10%);
     }
 
     &:active {
-      background-color: darken($color: $primary-purple, $amount: 15%);
+      background-color: darken($color: $primary-green, $amount: 15%);
     }
   }
 
   .optionsContainer {
     position: absolute;
-    background-color: $primary-purple;
+    background-color: $primary-green;
     top: 0;
     left: 0;
     right: 0;
@@ -55,15 +55,15 @@
 
 .option {
   padding: $spacing-m;
-  background-color: darken($color: $primary-purple, $amount: 20%);
+  background-color: darken($color: $primary-green, $amount: 20%);
   cursor: pointer;
 
   &:hover {
-    background-color: darken($color: $primary-purple, $amount: 10%);
+    background-color: darken($color: $primary-green, $amount: 10%);
   }
 
   &.selected {
-    background-color: $primary-purple;
+    background-color: $primary-green;
   }
 
   .optionCheckbox {
