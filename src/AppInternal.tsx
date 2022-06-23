@@ -1,6 +1,5 @@
 import React from "react"
 import { Outlet } from "react-router-dom"
-import { Footer } from "./components/Footer"
 import { Header, NavigationLink } from "./components/Header"
 
 import styles from "./App.module.scss"
@@ -23,7 +22,6 @@ const AppInternal = () => {
           <Outlet />
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

@@ -23,6 +23,7 @@ function App() {
         <Route path="/*" element={<AppStakers />}>
           <Route path={routes.Stake} element={<StakingPage />} />
           <Route path={routes.Overview} element={<OverviewPage />} />
+          <Route path={routes.Mint} element={<OverviewPage />} />
           <Route path={routes.Positions} element={<StakingPositionsPage />} />
           <Route path={routes.FundraiseClaim} element={<FundraisingClaimPage />} />
           <Route path={routes.USForbidden} element={<USForbiddenPage />} />

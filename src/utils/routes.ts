@@ -6,6 +6,7 @@ export const routes = {
   Protocols: "protocols",
   Internal: "internal",
   Overview: "overview",
+  Mint: "mint",
   USForbidden: "us",
 } as const
 

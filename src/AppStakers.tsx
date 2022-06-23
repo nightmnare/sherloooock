@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import { Outlet } from "react-router-dom"
 import { useAccount } from "wagmi"
-import { Footer } from "./components/Footer"
 import { Header, NavigationLink } from "./components/Header"
 import { useFundraisePosition } from "./hooks/api/useFundraisePosition"
 import { routes } from "./utils/routes"
@@ -22,6 +21,10 @@ const AppStakers = () => {
     {
       title: "OVERVIEW",
       route: routes.Overview,
+    },
+    {
+      title: "MINT",
+      route: routes.Mint,
     },
     {
       title: "STAKE",
@@ -55,7 +58,6 @@ const AppStakers = () => {
           <Outlet />
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

@@ -4,7 +4,6 @@ import { Title } from "../Title"
 import appStyles from "../../App.module.scss"
 import styles from "./ErrorBoundary.module.scss"
 import { Header } from "../Header"
-import { Footer } from "../Footer"
 import { Text } from "../Text"
 import { Button } from "../Button/Button"
 import { Column } from "../Layout"
@@ -36,7 +35,6 @@ const ErrorBoundary: React.FC<Props> = ({ error, componentStack, eventId, resetE
           </Column>
         </Box>
       </div>
-      <Footer />
     </div>
   )
 }
