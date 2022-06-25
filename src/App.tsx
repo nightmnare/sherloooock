@@ -7,6 +7,7 @@ import { StakingPositionsPage } from "./pages/StakingPositions"
 import { USForbiddenPage } from "./pages/USForbidden"
 import { OverviewPage } from "./pages/Overview"
 import { ProtocolPage } from "./pages/Protocol"
+import { MintPage } from "./pages/Mint"
 import AppStakers from "./AppStakers"
 import AppProtocols from "./AppProtocols"
 import AppInternal from "./AppInternal"
@@ -23,7 +24,7 @@ function App() {
         <Route path="/*" element={<AppStakers />}>
           <Route path={routes.Stake} element={<StakingPage />} />
           <Route path={routes.Overview} element={<OverviewPage />} />
-          <Route path={routes.Mint} element={<OverviewPage />} />
+          <Route path={routes.Mint} element={<MintPage />} />
           <Route path={routes.Positions} element={<StakingPositionsPage />} />
           <Route path={routes.FundraiseClaim} element={<FundraisingClaimPage />} />
           <Route path={routes.USForbidden} element={<USForbiddenPage />} />
