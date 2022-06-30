@@ -4,8 +4,8 @@ import axios from "./axios"
 import { getTVLOverTime as getTVLOverTimeUrl } from "./urls"
 
 type TVLDataPoint = {
-  timestamp: number
-  value: BigNumber
+  date: string
+  totalLiquidityUSD: number
 }
 
 type GetTVLOverTimeResponseData =
@@ -21,14 +21,14 @@ type GetTVLOverTimeResponseData =
       error: string
     }
 
-const parseResponse = (response: GetTVLOverTimeResponseData): TVLDataPoint[] | null => {
-  if (response.ok === false) return null
+// const parseResponse = (response: GetTVLOverTimeResponseData): TVLDataPoint[] | null => {
+//   if (response.ok === false) return null
 
-  return response.data.map((r) => ({
-    timestamp: r.timestamp,
-    value: BigNumber.from(r.value),
-  }))
-}
+//   return response.data.map((r) => ({
+//     timestamp: r.timestamp,
+//     value: BigNumber.from(r.value),
+//   }))
+// }
 
 export const useTVLOverTime = () => {
   const [loading, setLoading] = useState(false)
@@ -39,14 +39,18 @@ export const useTVLOverTime = () => {
     try {
       setLoading(true)
 
-      const { data: responseData } = await axios.get<GetTVLOverTimeResponseData>(getTVLOverTimeUrl())
+      const { data: responseData } = await axios.get<Array<TVLDataPoint>>("charts/Fantom")
+      // console.log(responseData)
+      setData(responseData)
 
-      if (responseData.ok === true) {
-        setData(parseResponse(responseData))
-      } else {
-        setData(null)
-        setError(new Error(responseData.error))
-      }
+      // const { data: responseData } = await axios.get<GetTVLOverTimeResponseData>(getTVLOverTimeUrl())
+
+      // if (responseData.ok === true) {
+      //   setData(parseResponse(responseData))
+      // } else {
+      //   setData(null)
+      //   setError(new Error(responseData.error))
+      // }
     } catch (error) {
       console.error(error)
       setData(null)

@@ -21,66 +21,100 @@ type ChartDataPoint = {
 
 export const OverviewPage: React.FC = () => {
   const { getTVLOverTime, data: tvlData } = useTVLOverTime()
-  const { getTVCOverTime, data: tvcData } = useTVCOverTime()
+  // const { getTVCOverTime, data: tvcData } = useTVCOverTime()
 
   useEffect(() => {
     getTVLOverTime()
-    getTVCOverTime()
-  }, [getTVLOverTime, getTVCOverTime])
+    // getTVCOverTime()
+  }, [getTVLOverTime])
 
-  const chartsData = useMemo(() => {
-    if (!tvlData || !tvcData) return
+  // useEffect(() => {
+  //   console.log(tvlData)
+  // }, [tvlData])
 
-    const tvcChartData: ChartDataPoint[] = []
-    const tvlChartData: ChartDataPoint[] = []
-    const capitalEfficiencyChartData: ChartDataPoint[] = []
+  // const chartsData = useMemo(() => {
+  //   if (!tvlData || !tvcData) return
 
-    for (let i = 0, j = 0; i < tvlData.length && j < tvcData.length; ) {
-      const tvcDataPointDate = DateTime.fromMillis(tvcData[i].timestamp * 1000)
-      const tvlDataPointDate = DateTime.fromMillis(tvlData[j].timestamp * 1000)
+  //   const tvcChartData: ChartDataPoint[] = []
+  //   const tvlChartData: ChartDataPoint[] = []
+  //   const capitalEfficiencyChartData: ChartDataPoint[] = []
 
-      let tvc = tvcData[i]
-      let tvl = tvlData[j]
+  //   for (let i = 0, j = 0; i < tvlData.length && j < tvcData.length; ) {
+  //     const tvcDataPointDate = DateTime.fromMillis(tvcData[i].timestamp * 1000)
+  //     const tvlDataPointDate = DateTime.fromMillis(tvlData[j].timestamp * 1000)
 
-      if (tvcDataPointDate.day !== tvlDataPointDate.day) {
-        if (tvcDataPointDate < tvlDataPointDate) {
-          tvl = j > 0 ? tvlData[j - 1] : tvlData[j]
-          i++
-        } else {
-          tvc = i > 0 ? tvcData[i - 1] : tvcData[i]
-          j++
-        }
-      } else {
-        i++
-        j++
-      }
+  //     let tvc = tvcData[i]
+  //     let tvl = tvlData[j]
 
-      const timestamp = Math.min(tvc.timestamp, tvl.timestamp)
+  //     if (tvcDataPointDate.day !== tvlDataPointDate.day) {
+  //       if (tvcDataPointDate < tvlDataPointDate) {
+  //         tvl = j > 0 ? tvlData[j - 1] : tvlData[j]
+  //         i++
+  //       } else {
+  //         tvc = i > 0 ? tvcData[i - 1] : tvcData[i]
+  //         j++
+  //       }
+  //     } else {
+  //       i++
+  //       j++
+  //     }
 
-      tvcChartData.push({
-        name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
-        value: Number(utils.formatUnits(tvc.value, 6)),
-      })
-      tvlChartData.push({
-        name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
-        value: Number(utils.formatUnits(tvl.value, 6)),
-      })
-      capitalEfficiencyChartData.push({
-        name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
-        value: Number(utils.formatUnits(tvc.value, 6)) / Number(utils.formatUnits(tvl.value, 6)),
-      })
-    }
+  //     const timestamp = Math.min(tvc.timestamp, tvl.timestamp)
 
-    return {
-      tvcChartData,
-      tvlChartData,
-      capitalEfficiencyChartData,
-    }
-  }, [tvlData, tvcData])
+  //     tvcChartData.push({
+  //       name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
+  //       value: Number(utils.formatUnits(tvc.value, 6)),
+  //     })
+  //     tvlChartData.push({
+  //       name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
+  //       value: Number(utils.formatUnits(tvl.value, 6)),
+  //     })
+  //     capitalEfficiencyChartData.push({
+  //       name: DateTime.fromMillis(timestamp * 1000).toLocaleString({ month: "2-digit", day: "2-digit" }),
+  //       value: Number(utils.formatUnits(tvc.value, 6)) / Number(utils.formatUnits(tvl.value, 6)),
+  //     })
+  //   }
+
+  //   return {
+  //     tvcChartData,
+  //     tvlChartData,
+  //     capitalEfficiencyChartData,
+  //   }
+  // }, [tvlData, tvcData])
 
   return (
     <Column spacing="m" className={styles.container}>
       <Row>
+        <Box shadow={false} fullWidth>
+          <Column spacing="m">
+            <Row>
+              <Title variant="h3">TOTAL VALUE LOCKED</Title>
+            </Row>
+            <Row>
+              <Title>{tvlData && tvlData.length > 0 && `$ ${tvlData[tvlData.length - 1].totalLiquidityUSD}`}</Title>
+            </Row>
+            <Row alignment="center">
+              <Chart
+                width={1000}
+                height={200}
+                data={tvlData?.map((item) => {
+                  return {
+                    name: DateTime.fromMillis(Number(item.date) * 1000).toLocaleString({
+                      year: "2-digit",
+                      month: "2-digit",
+                      day: "2-digit",
+                    }),
+                    value: item.totalLiquidityUSD,
+                  }
+                })}
+                tooltipProps={{ formatter: (v: number, name: string) => [`$${formatAmount(v, 0)}`, "TVC"] }}
+              />
+              {/* {JSON.stringify(tvlData)} */}
+            </Row>
+          </Column>
+        </Box>
+      </Row>
+      {/* <Row>
         <Box shadow={false} fullWidth>
           <Column spacing="m">
             <Row>
@@ -158,7 +192,7 @@ export const OverviewPage: React.FC = () => {
           <APYChart />
         </Column>
         <Column></Column>
-      </Row>
+      </Row> */}
       <Row spacing="m">
         <Column grow={1}>
           <CoveredProtocolsList />

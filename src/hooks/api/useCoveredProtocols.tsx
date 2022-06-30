@@ -148,7 +148,6 @@ export const CoveredProtocolsProvider: React.FC<PropsWithChildren<unknown>> = ({
     try {
       setLoading(true)
       const { data: responseData } = await axios.get<GetCoveredProtocolsResponseData>(getCoveredProtocolsUrl())
-
       if (responseData.ok === true) {
         setData(parseResponse(responseData))
       } else {
