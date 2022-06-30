@@ -99,17 +99,17 @@ const ProtocolBalanceInput: React.FC<Props> = ({ onChange = () => null, protocol
     <Column grow={1} spacing="m">
       <Row alignment="space-between" spacing="m">
         <Column grow={1}>
-          <Button variant="alternate" onClick={() => handleSelectPredefinedPeriod(2)}>
+          <Button variant="cta" onClick={() => handleSelectPredefinedPeriod(2)}>
             2 weeks
           </Button>
         </Column>
         <Column grow={1}>
-          <Button variant="alternate" onClick={() => handleSelectPredefinedPeriod(4)}>
+          <Button variant="cta" onClick={() => handleSelectPredefinedPeriod(4)}>
             1 month
           </Button>
         </Column>
         <Column grow={1}>
-          <Button variant="alternate" onClick={() => handleSelectPredefinedPeriod(12)}>
+          <Button variant="cta" onClick={() => handleSelectPredefinedPeriod(12)}>
             3 months
           </Button>
         </Column>
