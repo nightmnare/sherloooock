@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect } from "react"
 import { utils } from "ethers"
 import { DateTime } from "luxon"
 import { Box } from "../../components/Box"
@@ -20,9 +20,49 @@ type ChartDataPoint = {
 }
 
 export const OverviewPage: React.FC = () => {
-  const { getTVLOverTime, data: tvlData } = useTVLOverTime()
+  const { getTVLOverTime, spookySwap, beethovenX, tombFinance } = useTVLOverTime()
   // const { getTVCOverTime, data: tvcData } = useTVCOverTime()
 
+  const spookySwapLength = spookySwap.length
+  const beethovenXLength = beethovenX.length
+  const tombFinanceLength = tombFinance.length
+  const tvlData = spookySwap.map((item, index) => ({
+    name: DateTime.fromMillis(Number(item.date) * 1000).toLocaleString({
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    }),
+    value:
+      item.totalLiquidityUSD +
+      (beethovenX[index + beethovenXLength - spookySwapLength]?.totalLiquidityUSD || 0) +
+      (tombFinance[index + tombFinanceLength - spookySwapLength]?.totalLiquidityUSD || 0),
+  }))
+  const protocolsData = React.useMemo(() => {
+    const spookySwapTVL = spookySwap[spookySwap.length - 1]?.totalLiquidityUSD || 0
+    const beethovenXTVL = beethovenX[beethovenX.length - 1]?.totalLiquidityUSD || 0
+    const tombFinanceTVL = tombFinance[tombFinance.length - 1]?.totalLiquidityUSD || 0
+    const totalTVL = Math.floor(spookySwapTVL + beethovenXTVL + tombFinanceTVL)
+    return [
+      {
+        name: "SpookySwap",
+        url: "https://spooky.fi/#/",
+        tvl: spookySwapTVL,
+        percentageOfTotal: totalTVL !== 0 ? (spookySwapTVL / totalTVL) * 100 : 0,
+      },
+      {
+        name: "Beethoven X",
+        url: "https://www.beethovenx.io",
+        tvl: beethovenXTVL,
+        percentageOfTotal: totalTVL !== 0 ? (beethovenXTVL / totalTVL) * 100 : 0,
+      },
+      {
+        name: "Tomb Finance",
+        url: "https://tomb.finance/",
+        tvl: tombFinanceTVL,
+        percentageOfTotal: totalTVL !== 0 ? (tombFinanceTVL / totalTVL) * 100 : 0,
+      },
+    ]
+  }, [spookySwap, beethovenX, tombFinance])
   useEffect(() => {
     getTVLOverTime()
     // getTVCOverTime()
@@ -91,25 +131,15 @@ export const OverviewPage: React.FC = () => {
               <Title variant="h3">TOTAL VALUE LOCKED</Title>
             </Row>
             <Row>
-              <Title>{tvlData && tvlData.length > 0 && `$ ${tvlData[tvlData.length - 1].totalLiquidityUSD}`}</Title>
+              <Title>{tvlData && tvlData.length > 0 && `$ ${tvlData[tvlData.length - 1].value}`}</Title>
             </Row>
             <Row alignment="center">
               <Chart
                 width={1000}
                 height={200}
-                data={tvlData?.map((item) => {
-                  return {
-                    name: DateTime.fromMillis(Number(item.date) * 1000).toLocaleString({
-                      year: "2-digit",
-                      month: "2-digit",
-                      day: "2-digit",
-                    }),
-                    value: item.totalLiquidityUSD,
-                  }
-                })}
+                data={tvlData}
                 tooltipProps={{ formatter: (v: number, name: string) => [`$${formatAmount(v, 0)}`, "TVC"] }}
               />
-              {/* {JSON.stringify(tvlData)} */}
             </Row>
           </Column>
         </Box>
@@ -195,7 +225,7 @@ export const OverviewPage: React.FC = () => {
       </Row> */}
       <Row spacing="m">
         <Column grow={1}>
-          <CoveredProtocolsList />
+          <CoveredProtocolsList protocolsData={protocolsData} />
         </Column>
       </Row>
     </Column>

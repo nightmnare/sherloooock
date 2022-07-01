@@ -5,21 +5,24 @@ import { Title } from "../Title"
 import { useCoveredProtocols } from "../../hooks/api/useCoveredProtocols"
 import { Text } from "../Text"
 import { formatAmount } from "../../utils/format"
-import { ethers } from "ethers"
+import { BigNumber, ethers } from "ethers"
 import styles from "./CoveredProtocolsList.module.scss"
 import cx from "classnames"
+import { useTVLOverTime } from "../../hooks/api/useTVLOverTime"
 
 /**
  * List of covered protocols
  */
-const CoveredProtocolsList: React.FC = () => {
-  const { getCoveredProtocols, data: coveredProtocolsData } = useCoveredProtocols()
+const CoveredProtocolsList: React.FC<{
+  protocolsData: Array<{ name: string; url: string; tvl: number; percentageOfTotal: number }>
+}> = ({ protocolsData }) => {
+  // const { getCoveredProtocols, data: coveredProtocolsData } = useCoveredProtocols()
   // const { getTVCOverTime, data: tvcData } = useTVCOverTime()
 
-  useEffect(() => {
-    getCoveredProtocols()
-    // getTVCOverTime()
-  }, [getCoveredProtocols])
+  // useEffect(() => {
+  //   getCoveredProtocols()
+  //   getTVCOverTime()
+  // }, [getCoveredProtocols])
 
   // Total Value Covered
   // const tvc = useMemo(() => {
@@ -91,24 +94,24 @@ const CoveredProtocolsList: React.FC = () => {
               </Column>
             </Row>
             <Column grow={1} spacing="xs" className={styles.listContainer}>
-              {/* {protocolsData?.map((item) => (
-                <Row key={item.id}>
+              {protocolsData.map((item) => (
+                <Row key={item.name}>
                   <Column className={cx(styles.listColumn, styles.entry)}>
-                    <a href={item.website} target="_blank" rel="noopener noreferrer">
+                    <a href={item.url} target="_blank" rel="noopener noreferrer">
                       <Text strong className={styles.protocolName}>
                         {item.name}
                       </Text>
                     </a>
                   </Column>
                   <Column alignment="end" className={cx(styles.listColumn, styles.entry)}>
-                    <Text>${formatAmount(ethers.utils.formatUnits(item.coverage, 6), 0)}</Text>
+                    <Text>${item.tvl}</Text>
                   </Column>
                   <Column className={cx(styles.listColumn, styles.entry)} grow={1}></Column>
                   <Column className={cx(styles.listColumn, styles.entry)}>
                     <Text>{item.percentageOfTotal.toFixed(0)}%</Text>
                   </Column>
                 </Row>
-              ))} */}
+              ))}
               {/* {tvc && (
                 <Row className={styles.header}>
                   <Column className={styles.listColumn}>

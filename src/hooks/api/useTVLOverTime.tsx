@@ -34,14 +34,30 @@ export const useTVLOverTime = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
   const [data, setData] = useState<TVLDataPoint[] | null>(null)
+  const [spookySwap, setSpookySwap] = useState<TVLDataPoint[]>([])
+  const [beethovenX, setBeethovenX] = useState<TVLDataPoint[]>([])
+  const [tombFinance, setTombFinance] = useState<TVLDataPoint[]>([])
 
   const getTVLOverTime = useCallback(async () => {
     try {
       setLoading(true)
 
-      const { data: responseData } = await axios.get<Array<TVLDataPoint>>("charts/Fantom")
+      // const { data: responseData } = await axios.get<Array<TVLDataPoint>>("charts/Fantom")
+      const {
+        data: { tvl: spookySwapData },
+      } = await axios.get<{ tvl: Array<TVLDataPoint> }>("protocol/spookyswap")
+      setSpookySwap(spookySwapData)
+      const {
+        data: { tvl: beethovenXData },
+      } = await axios.get<{ tvl: Array<TVLDataPoint> }>("protocol/beethoven-x")
+      setBeethovenX(beethovenXData)
+      const {
+        data: { tvl: tombFinanceData },
+      } = await axios.get<{ tvl: Array<TVLDataPoint> }>("protocol/tomb-finance")
+      setTombFinance(tombFinanceData)
+      // console.log(spookySwapData)
+      // setData(spookySwapData)
       // console.log(responseData)
-      setData(responseData)
 
       // const { data: responseData } = await axios.get<GetTVLOverTimeResponseData>(getTVLOverTimeUrl())
 
@@ -63,6 +79,9 @@ export const useTVLOverTime = () => {
   return {
     loading,
     data,
+    spookySwap,
+    beethovenX,
+    tombFinance,
     error,
     getTVLOverTime,
   }

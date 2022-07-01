@@ -4,7 +4,7 @@ import axios from "axios"
 const instance = axios.create({
   // baseURL: config.indexerBaseUrl,
   baseURL: "https://api.llama.fi/",
-  timeout: 30000,
+  timeout: 60000,
 })
 
 export default instance
