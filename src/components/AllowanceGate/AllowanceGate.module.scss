@@ -20,36 +20,36 @@
     position: relative;
     border: 0;
     flex: 3;
+    margin-right: 0 !important;
+    clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%);
 
     &.success {
       background-color: #00feb3;
       color: black;
       opacity: 1;
 
-      &::after {
-        border-left: 13px solid #00feb3;
-      }
+      // &::after {
+      //   background-color: #00feb3;
+      // }
     }
 
-    &:hover:not(:disabled) {
-      &::after {
-        border-left: 13px solid darken($color: $primary-green, $amount: 10%);
-      }
-    }
+    // &:hover:not(:disabled) {
+    //   &::after {
+    //     background-color: darken($color: $primary-green, $amount: 10%);
+    //   }
+    // }
   }
 
-  .button::after {
-    content: "";
-    position: absolute;
-    right: -13px;
-    top: 0px;
-    width: 0;
-    height: 0;
-
-    border-top: 26px solid transparent;
-    border-left: 13px solid $primary-green;
-    border-bottom: 26px solid transparent;
-  }
+  // .button::after {
+  //   content: "";
+  //   position: absolute;
+  //   top: 0;
+  //   left: 100%;
+  //   width: 13px;
+  //   height: 100%;
+  //   background-color: $primary-green;
+  //   clip-path: polygon(0 0, 100% 50%, 0 100%);
+  // }
 
   .approveButton {
     z-index: 2;
@@ -58,8 +58,8 @@
 
   .actionButton {
     z-index: 1;
-    margin-left: -26px;
-    padding-left: 26px;
+    margin-left: -13px;
+    padding-left: 13px;
     border-left: 0;
     border-right: 0;
   }

@@ -86,8 +86,7 @@ const CoveredProtocolsList: React.FC<{
               <Column alignment="end" className={styles.listColumn}>
                 <Text strong>Coverage</Text>
               </Column>
-              <Column className={styles.listColumn} grow={1}></Column>
-              <Column className={styles.listColumn} grow={0.15}>
+              <Column alignment="end" className={styles.listColumn} grow={1}>
                 <Text strong>%</Text>
               </Column>
             </Row>
@@ -104,8 +103,7 @@ const CoveredProtocolsList: React.FC<{
                   <Column alignment="end" className={cx(styles.listColumn, styles.entry)}>
                     <Text>{formatter.format(item.tvl)}</Text>
                   </Column>
-                  <Column className={cx(styles.listColumn, styles.entry)} grow={1}></Column>
-                  <Column className={cx(styles.listColumn, styles.entry)} grow={0.15}>
+                  <Column alignment="end" className={cx(styles.listColumn, styles.entry)} grow={1}>
                     <Text>{item.percentageOfTotal.toFixed(0)}%</Text>
                   </Column>
                 </Row>
