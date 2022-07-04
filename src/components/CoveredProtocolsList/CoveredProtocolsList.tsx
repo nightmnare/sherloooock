@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo } from "react"
+import * as React from "react"
 import { Box } from "../Box"
 import { Column, Row } from "../Layout"
 import { Title } from "../Title"
-import { useCoveredProtocols } from "../../hooks/api/useCoveredProtocols"
 import { Text } from "../Text"
-import { formatAmount } from "../../utils/format"
-import { BigNumber, ethers } from "ethers"
 import styles from "./CoveredProtocolsList.module.scss"
 import cx from "classnames"
-import { useTVLOverTime } from "../../hooks/api/useTVLOverTime"
+
+const formatter = Intl.NumberFormat("en", { notation: "compact", style: "currency", currency: "USD" })
 
 /**
  * List of covered protocols
@@ -89,7 +87,7 @@ const CoveredProtocolsList: React.FC<{
                 <Text strong>Coverage</Text>
               </Column>
               <Column className={styles.listColumn} grow={1}></Column>
-              <Column className={styles.listColumn}>
+              <Column className={styles.listColumn} grow={0.15}>
                 <Text strong>%</Text>
               </Column>
             </Row>
@@ -104,10 +102,10 @@ const CoveredProtocolsList: React.FC<{
                     </a>
                   </Column>
                   <Column alignment="end" className={cx(styles.listColumn, styles.entry)}>
-                    <Text>${item.tvl}</Text>
+                    <Text>{formatter.format(item.tvl)}</Text>
                   </Column>
                   <Column className={cx(styles.listColumn, styles.entry)} grow={1}></Column>
-                  <Column className={cx(styles.listColumn, styles.entry)}>
+                  <Column className={cx(styles.listColumn, styles.entry)} grow={0.15}>
                     <Text>{item.percentageOfTotal.toFixed(0)}%</Text>
                   </Column>
                 </Row>

@@ -19,6 +19,8 @@ type ChartDataPoint = {
   value: number
 }
 
+const formatter = Intl.NumberFormat("en", { notation: "compact", style: "currency", currency: "USD" })
+
 export const OverviewPage: React.FC = () => {
   const { getTVLOverTime, spookySwap, beethovenX, tombFinance } = useTVLOverTime()
   // const { getTVCOverTime, data: tvcData } = useTVCOverTime()
@@ -131,7 +133,7 @@ export const OverviewPage: React.FC = () => {
               <Title variant="h3">TOTAL VALUE LOCKED</Title>
             </Row>
             <Row>
-              <Title>{tvlData && tvlData.length > 0 && `$ ${tvlData[tvlData.length - 1].value}`}</Title>
+              <Title>{tvlData && tvlData.length > 0 && `${formatter.format(tvlData[tvlData.length - 1].value)}`}</Title>
             </Row>
             <Row alignment="center">
               <Chart
