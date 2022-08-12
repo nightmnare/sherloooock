@@ -26,30 +26,17 @@ import Options from "../../components/Options/Options"
  *
  * TODO: Should be fetched automatically or hardcoded?
  */
-export const PERIODS_IN_SECONDS = {
-  SIX_MONTHS: 60 * 60 * 24 * 7 * 26,
-  ONE_YEAR: 60 * 60 * 24 * 7 * 52,
-}
-
-const STAKING_PERIOD_OPTIONS = [
-  {
-    label: "6 months",
-    value: PERIODS_IN_SECONDS.SIX_MONTHS,
-  },
-  { label: "12 months", value: PERIODS_IN_SECONDS.ONE_YEAR },
-]
 
 export const StakingPage: React.FC = () => {
   const [amount, setAmount] = React.useState<BigNumber>()
   const [debouncedAmountBN] = useDebounce(amount, 500, {
     equalityFn: (l, r) => (r ? !!l?.eq(r) : l === undefined),
   })
-  const [stakingPeriod, setStakingPeriod] = React.useState<number>(STAKING_PERIOD_OPTIONS[0].value)
   const [sherRewards, setSherRewards] = React.useState<BigNumber>()
   const [isLoadingRewards, setIsLoadingRewards] = React.useState(false)
   const { getStakingPositions, data: stakePositionsData } = useStakingPositions()
 
-  const { tvl, address, stake, refreshTvl } = useSherlock()
+  const { tvl, address, refreshTvl } = useSherlock()
   const { computeRewards } = useSherDistManager()
   const { format: formatSHER } = useERC20("SHER")
   const { format: formatUSDC, balance: usdcBalance } = useERC20("USDC")
@@ -61,40 +48,28 @@ export const StakingPage: React.FC = () => {
    * Compute staking rewards for current amount and staking period
    */
   const handleComputeRewards = React.useCallback(async () => {
-    if (!stakingPeriod || !tvl) {
-      return
-    }
+    if (!tvl) return
 
     if (!debouncedAmountBN) {
       setSherRewards(undefined)
       return
     }
-
-    setIsLoadingRewards(true)
-
-    const sher = await computeRewards(tvl, debouncedAmountBN, stakingPeriod)
-    if (sher) {
-      setSherRewards(sher)
-    }
-
-    setIsLoadingRewards(false)
-  }, [debouncedAmountBN, stakingPeriod, tvl, computeRewards])
+    setSherRewards(debouncedAmountBN.mul(BigNumber.from(10).pow(10)))
+  }, [debouncedAmountBN, tvl])
 
   /**
    * Stake USDC for a given period of time
    */
   const handleOnStake = React.useCallback(async () => {
-    if (!amount || !stakingPeriod) {
-      return
-    }
+    if (!amount) return
 
-    const result = await waitForTx(async () => (await stake(amount, stakingPeriod)) as ethers.ContractTransaction, {
-      transactionType: TxType.STAKE,
-    })
+    // const result = await waitForTx(async () => (await stake(amount, stakingPeriod)) as ethers.ContractTransaction, {
+    //   transactionType: TxType.STAKE,
+    // })
 
     // Navigate to positions page
-    navigate("/positions", { state: { refreshAfterBlockNumber: result.blockNumber } })
-  }, [amount, stakingPeriod, stake, waitForTx, navigate])
+    // navigate("/positions", { state: { refreshAfterBlockNumber: result.blockNumber } })
+  }, [amount])
 
   // Compute rewards when amount or period is changed
   React.useEffect(() => {
@@ -112,7 +87,7 @@ export const StakingPage: React.FC = () => {
     <Box>
       <LoadingContainer loading={isLoadingRewards}>
         <Column spacing="m">
-          <Title>Stake</Title>
+          <Title>Deposit</Title>
           <Row alignment="space-between">
             <Column>
               <Text>Total Value Locked</Text>
@@ -146,7 +121,6 @@ export const StakingPage: React.FC = () => {
                 placeholder="Choose amount"
                 balance={usdcBalance}
               />
-              <Options options={STAKING_PERIOD_OPTIONS} value={stakingPeriod} onChange={setStakingPeriod} />
               {sherRewards && (
                 <>
                   <Row>
@@ -177,13 +151,13 @@ export const StakingPage: React.FC = () => {
                 </>
               )}
 
-              {amount && stakingPeriod && sherRewards && (
+              {amount && sherRewards && (
                 <Row alignment="center">
                   <ConnectGate>
                     <AllowanceGate
                       amount={amount}
                       spender={address}
-                      actionName="Stake"
+                      actionName="Claim"
                       action={handleOnStake}
                       onSuccess={refreshTvl}
                     ></AllowanceGate>

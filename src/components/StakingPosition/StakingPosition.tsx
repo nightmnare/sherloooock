@@ -2,7 +2,6 @@ import { BigNumber, ethers } from "ethers"
 import React from "react"
 import useSherlock from "../../hooks/useSherlock"
 import useWaitTx from "../../hooks/useWaitTx"
-import { PERIODS_IN_SECONDS } from "../../pages/Staking"
 import { formattedTimeDifference } from "../../utils/dates"
 import { formatAmount } from "../../utils/format"
 import { Box } from "../Box"
@@ -122,24 +121,6 @@ const StakingPosition: React.FC<Props> = ({ id, usdcBalance, sherRewards, lockup
         )}
         {isUnlocked && (
           <Column className={styles.container} spacing="m">
-            <Row spacing="m">
-              <Column grow={1}>
-                <Button
-                  variant={stakingPeriod === PERIODS_IN_SECONDS.SIX_MONTHS ? "primary" : "alternate"}
-                  onClick={() => setStakingPeriod(PERIODS_IN_SECONDS.SIX_MONTHS)}
-                >
-                  6 months
-                </Button>
-              </Column>
-              <Column grow={1}>
-                <Button
-                  variant={stakingPeriod === PERIODS_IN_SECONDS.ONE_YEAR ? "primary" : "alternate"}
-                  onClick={() => setStakingPeriod(PERIODS_IN_SECONDS.ONE_YEAR)}
-                >
-                  12 months
-                </Button>
-              </Column>
-            </Row>
             <Row spacing="m">
               <Column grow={1}>
                 <Button variant="secondary" onClick={handleUnstake}>
