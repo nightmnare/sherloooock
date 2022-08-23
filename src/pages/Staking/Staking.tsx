@@ -41,7 +41,7 @@ export const StakingPage: React.FC = () => {
   const { format: formatSHER } = useERC20("SHER")
   const { format: formatUSDC, balance: usdcBalance } = useERC20("USDC")
   const { waitForTx } = useWaitTx()
-  const [{ data: accountData }] = useAccount()
+  const accountData = useAccount()
   const navigate = useNavigate()
 
   /**

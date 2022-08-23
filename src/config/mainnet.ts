@@ -1,7 +1,7 @@
 import { Config } from "./ConfigType"
 
 export const config: Config = {
-  networkId: 1,
+  networkId: 250,
   sherBuyEntryDeadline: 1647100800,
   alchemyApiUrl: "wss://eth-mainnet.alchemyapi.io/v2/H7GQZq65vKCHEh5cnz_luQmYM8HWWcr-",
   indexerBaseUrl: "https://mainnet.indexer.sherlock.xyz/",

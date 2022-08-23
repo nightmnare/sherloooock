@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react"
-import { useAccount, useConnect, useNetwork } from "wagmi"
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi"
 import config from "../../config"
 import { shortenAddress } from "../../utils/format"
 import { setUser } from "../../utils/sentry"
@@ -14,17 +14,16 @@ import WalletProviderModal from "../WalletProviderModal/WalletProviderModal"
  */
 const ConnectButton: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [isModalVisible, setIsModalVisible] = React.useState(false)
-
-  const [{ data: connectionData }] = useConnect()
-  const [{ data: networkData }, switchNetwork] = useNetwork()
-  const [{ data: accountData }] = useAccount()
+  const { switchNetwork } = useSwitchNetwork()
+  const accountData = useAccount()
+  const { chain } = useNetwork()
 
   /**
    * Set Sentry User
    */
   React.useEffect(() => {
-    setUser(accountData?.address ? { username: accountData?.address } : null)
-  }, [accountData?.address])
+    setUser(accountData.address ? { username: accountData.address } : null)
+  }, [accountData.address])
 
   /**
    * Triggers a network switch to the correct network
@@ -41,7 +40,7 @@ const ConnectButton: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   }, [isModalVisible])
 
   // Check if any wallet is connected
-  if (!connectionData.connected) {
+  if (!accountData.isConnected) {
     return (
       <>
         <Button onClick={handleToggleConnectionModal} variant="cta">
@@ -53,7 +52,7 @@ const ConnectButton: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   }
 
   // Check if correct network is selected
-  const isCorrectNetwork = networkData.chain?.id === config.networkId
+  const isCorrectNetwork = chain?.id === config.networkId
   if (!isCorrectNetwork) {
     return (
       <Button variant="cta" onClick={handleSwitchToCorrectNetwork}>
@@ -61,7 +60,7 @@ const ConnectButton: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
       </Button>
     )
   }
-  return <Button variant="cta">{shortenAddress(accountData?.address)}</Button>
+  return <Button variant="cta">{shortenAddress(accountData.address)}</Button>
 }
 
 export default ConnectButton

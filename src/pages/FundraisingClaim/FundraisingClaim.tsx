@@ -17,7 +17,7 @@ import { formattedTimeDifference } from "../../utils/dates"
 import { formatAmount } from "../../utils/format"
 
 export const FundraisingClaimPage = () => {
-  const [{ data: accountData }] = useAccount()
+  const accountData = useAccount()
   const sherClaim = useSherClaimContract()
   /**
    * Custom hook for fetching fundraise position from Indexer API

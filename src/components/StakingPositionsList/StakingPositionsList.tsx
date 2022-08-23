@@ -20,7 +20,7 @@ type LocationState = {
 }
 
 export const StakingPositionsList: React.FC = () => {
-  const [{ data: accountData }] = useAccount()
+  const accountData = useAccount()
   const { getStakingPositions, data, loading } = useStakingPositions()
   const [positions, setPositions] = React.useState<Array<StakingPosition>>([])
   const navigate = useNavigate()

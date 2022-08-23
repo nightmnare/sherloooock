@@ -19,8 +19,8 @@ const useSherlock = () => {
   const [tvl, setTvl] = React.useState<BigNumber>()
 
   const provider = useProvider()
-  const [{ data: signerData }] = useSigner()
-  const [{ data: accountData }] = useAccount()
+  const { data: signerData } = useSigner()
+  const accountData = useAccount()
   const contract: Sherlock = useContract({
     addressOrName: SHERLOCK_ADDRESS,
     signerOrProvider: signerData || provider,

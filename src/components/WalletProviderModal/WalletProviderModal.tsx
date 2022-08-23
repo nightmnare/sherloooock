@@ -1,5 +1,7 @@
 import React from "react"
-import { useConnect } from "wagmi"
+import { defaultChains, useAccount, useConnect } from "wagmi"
+import { InjectedConnector } from "wagmi/connectors/injected"
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import Modal from "../Modal/Modal"
 import styles from "./WalletProviderModal.module.scss"
 import { ReactComponent as Metamask } from "../../assets/icons/metamask.svg"
@@ -17,7 +19,16 @@ interface Props {
  * wallet providers, in order to connect to the web application.
  */
 const WalletProviderModal: React.FC<Props> = ({ onClose }) => {
-  const [{ data }, connect] = useConnect()
+  const { isConnected } = useAccount()
+  const { connect: metamaskConnect } = useConnect({ connector: new InjectedConnector() })
+  // const { connect: walletConnect } = useConnect({
+  //   connector: new WalletConnectConnector({
+  //     chains,
+  //     options: {
+  //       qrcode: true,
+  //     },
+  //   }),
+  // })
 
   /**
    * Connects via given connector
@@ -25,23 +36,25 @@ const WalletProviderModal: React.FC<Props> = ({ onClose }) => {
   const handleConnectWithConnector = React.useCallback(
     (e: React.SyntheticEvent, connectorId: string) => {
       e.stopPropagation()
-
-      const connector = data?.connectors?.find((item) => item.id === connectorId)
-
-      if (!connector) {
-        return
+      switch (connectorId) {
+        case "injected":
+          metamaskConnect()
+          break
+        case "walletConnect":
+          metamaskConnect()
+          break
+        default:
+          break
       }
-
-      connect(connector)
     },
-    [data, connect]
+    [metamaskConnect]
   )
 
   React.useEffect(() => {
-    if (data.connected) {
+    if (isConnected) {
       onClose()
     }
-  }, [data, onClose])
+  }, [isConnected, onClose])
 
   return (
     <Modal closeable onClose={onClose}>

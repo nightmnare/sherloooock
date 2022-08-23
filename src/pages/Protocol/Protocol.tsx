@@ -25,7 +25,7 @@ export const ProtocolPage: React.FC = () => {
   const [coverageLeft, setCoverageLeft] = React.useState<BigNumber>()
 
   const { data: coveredProtocols, getCoveredProtocols } = useCoveredProtocols()
-  const [{ data: accountData }] = useAccount()
+  const accountData = useAccount()
 
   const protocolSelectOptions = React.useMemo(
     () =>

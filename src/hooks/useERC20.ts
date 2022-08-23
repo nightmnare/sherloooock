@@ -31,7 +31,7 @@ type AvailableERC20Tokens = keyof typeof TokenData
 const useERC20 = (token: AvailableERC20Tokens) => {
   const address = TokenData[token].contract
   if (!address) {
-    throw Error("Address or token name required")
+    // throw Error("Address or token name required")
   }
 
   const decimals = TokenData[token].decimals
@@ -39,8 +39,8 @@ const useERC20 = (token: AvailableERC20Tokens) => {
   const [allowances, setAllowances] = React.useState<{ [key: string]: BigNumber }>({})
 
   const provider = useProvider()
-  const [{ data: signerData }] = useSigner()
-  const [{ data: accountData }] = useAccount()
+  const { data: signerData } = useSigner()
+  const accountData = useAccount()
 
   const contract: ERC20 = useContract({
     addressOrName: address,
