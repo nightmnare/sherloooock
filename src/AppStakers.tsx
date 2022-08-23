@@ -44,7 +44,7 @@ const AppStakers = () => {
   }
 
   navigationLinks.push({
-    title: "PROTOCOLS",
+    title: "DOCS",
     route: routes.Protocols,
     external: true,
   })
