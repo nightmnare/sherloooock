@@ -160,7 +160,7 @@ export const StakingPage: React.FC = () => {
                       amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
                         BigNumber.from(10).pow(decimals - 2)
                       )}
-                      spender={stakingType === StakingTypeEnum.one ? addressOne : addressTwo}
+                      spender={stakingType === StakingTypeEnum.One ? addressOne : addressTwo}
                       actionName="Stake"
                       action={handleOnStake}
                       onSuccess={() => setAmount("")}
