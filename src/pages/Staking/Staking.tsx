@@ -70,7 +70,7 @@ export const StakingPage: React.FC = () => {
   const handleOnStake = React.useCallback(async () => {
     if (!amount || isNaN(Number(amount))) return
 
-    const amountBigNum = BigNumber.from(Math.floor(Number(amount) * 100)).pow(decimals - 2)
+    const amountBigNum = BigNumber.from(Math.floor(Number(amount) * 100)).mul(BigNumber.from(10).pow(decimals - 2))
     stake(amountBigNum, stakingType)
     await waitForTx(async () => (await stake(amountBigNum, stakingType)) as ethers.ContractTransaction, {
       transactionType: TxType.STAKE,
@@ -173,7 +173,13 @@ export const StakingPage: React.FC = () => {
                   <Button
                     onClick={(event) => {
                       event.preventDefault()
-                      if (stakedAmount) unstake(stakedAmount, stakingType)
+                      if (stakedAmount)
+                        waitForTx(
+                          async () => (await unstake(stakedAmount, stakingType)) as ethers.ContractTransaction,
+                          {
+                            transactionType: TxType.UNSTAKE,
+                          }
+                        )
                     }}
                     disabled={!stakedAmount || stakedAmount.lte(0)}
                   >
@@ -182,7 +188,10 @@ export const StakingPage: React.FC = () => {
                   <Button
                     onClick={(event) => {
                       event.preventDefault()
-                      if (stakedAmount) claimRewards(stakingType)
+                      if (stakedAmount)
+                        waitForTx(async () => (await claimRewards(stakingType)) as ethers.ContractTransaction, {
+                          transactionType: TxType.CLAIM_REWARDS,
+                        })
                     }}
                     disabled={!stakedAmount || stakedAmount.lte(0)}
                   >

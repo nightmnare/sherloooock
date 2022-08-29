@@ -7,6 +7,8 @@ export enum TxType {
   APPROVE = "APPROVE",
   EXECUTE = "EXECUTE",
   STAKE = "STAKE",
+  UNSTAKE = "UNSTAKE",
+  CLAIM_REWARDS = "CLAIM_REWARDS",
   ADD_PROTOCOL_BALANCE = "ADD_PROTOCOL_BALANCE",
 }
 
@@ -86,6 +88,26 @@ const TransactionTypeMessages: TxTypeMessages = {
     },
   },
   [TxType.STAKE]: {
+    [TxState.PENDING]: {
+      title: "Transaction approved and pending",
+      messages: ["Waiting for the stake transaction (2/2) to make its way onto the blockchain."],
+    },
+    [TxState.SUCCESS]: {
+      title: "Transaction was successful!",
+      messages: ["Success!! Stake transaction (2/2) is completed. Look into your wallet for the receipt NFT."],
+    },
+  },
+  [TxType.UNSTAKE]: {
+    [TxState.PENDING]: {
+      title: "Transaction approved and pending",
+      messages: ["Waiting for the stake transaction (2/2) to make its way onto the blockchain."],
+    },
+    [TxState.SUCCESS]: {
+      title: "Transaction was successful!",
+      messages: ["Success!! Stake transaction (2/2) is completed. Look into your wallet for the receipt NFT."],
+    },
+  },
+  [TxType.CLAIM_REWARDS]: {
     [TxState.PENDING]: {
       title: "Transaction approved and pending",
       messages: ["Waiting for the stake transaction (2/2) to make its way onto the blockchain."],
