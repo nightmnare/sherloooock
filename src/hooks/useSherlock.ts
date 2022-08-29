@@ -38,8 +38,8 @@ const useSherlock = () => {
   const stake = React.useCallback(
     async (amount: BigNumber, type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.Stake(amount)
-      else return contractTwo.Stake(amount)
+      if (type === StakingTypeEnum.One) return contractOne.deposit(amount)
+      else return contractTwo.deposit(amount)
     },
     [accountData?.address, contractOne, contractTwo]
   )
@@ -50,8 +50,8 @@ const useSherlock = () => {
   const unstake = React.useCallback(
     async (amount: BigNumber, type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.Unstake(amount)
-      else return contractTwo.Unstake(amount)
+      if (type === StakingTypeEnum.One) return contractOne.claimAndWithdraw()
+      else return contractTwo.claimAndWithdraw()
     },
     [accountData?.address, contractOne, contractTwo]
   )
@@ -59,8 +59,8 @@ const useSherlock = () => {
   const claimRewards = React.useCallback(
     async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.claimRewards()
-      else return contractTwo.claimRewards()
+      if (type === StakingTypeEnum.One) return contractOne.claim()
+      else return contractTwo.claim()
     },
     [accountData?.address, contractOne, contractTwo]
   )
@@ -68,8 +68,8 @@ const useSherlock = () => {
   const checkRewards = React.useCallback(
     async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.CheckRewards(accountData?.address)
-      else return contractTwo.CheckRewards(accountData?.address)
+      if (type === StakingTypeEnum.One) return contractOne.CalculateReward(accountData?.address)
+      else return contractTwo.CalculateReward(accountData?.address)
     },
     [accountData?.address, contractOne, contractTwo]
   )
@@ -77,16 +77,16 @@ const useSherlock = () => {
   const tokenStaked = React.useCallback(
     async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.TokensStaked(accountData?.address)
-      else return contractTwo.TokensStaked(accountData?.address)
+      if (type === StakingTypeEnum.One) return contractOne.StakedTokens(accountData?.address)
+      else return contractTwo.StakedTokens(accountData?.address)
     },
     [accountData?.address, contractOne, contractTwo]
   )
 
   const rewardFactor = React.useCallback(
     async (type: StakingTypeEnum) => {
-      if (type === StakingTypeEnum.One) return contractOne.RewardFactor()
-      else return contractTwo.RewardFactor()
+      if (type === StakingTypeEnum.One) return contractOne.VaultReward()
+      else return contractTwo.VaultReward()
     },
     [contractOne, contractTwo]
   )

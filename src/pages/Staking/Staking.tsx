@@ -71,7 +71,6 @@ export const StakingPage: React.FC = () => {
     if (!amount || isNaN(Number(amount))) return
 
     const amountBigNum = BigNumber.from(Math.floor(Number(amount) * 100)).mul(BigNumber.from(10).pow(decimals - 2))
-    stake(amountBigNum, stakingType)
     await waitForTx(async () => (await stake(amountBigNum, stakingType)) as ethers.ContractTransaction, {
       transactionType: TxType.STAKE,
     })

@@ -16,30 +16,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "YourAddress",
+        name: "Who",
         type: "address",
       },
     ],
-    name: "CalculateDailyReward",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "YourAddress",
-        type: "address",
-      },
-    ],
-    name: "CheckRewards",
+    name: "CalculateReward",
     outputs: [
       {
         internalType: "uint256",
@@ -54,11 +35,11 @@ const _abi = [
     inputs: [
       {
         internalType: "uint256",
-        name: "BPSperDay",
+        name: "HowManyTokens",
         type: "uint256",
       },
     ],
-    name: "EditEmission",
+    name: "EditLockReward",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -71,7 +52,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "EditMinimumStakeTime",
+    name: "EditLockingPeriod",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -80,11 +61,11 @@ const _abi = [
     inputs: [
       {
         internalType: "contract ERC721",
-        name: "WhatERC721",
+        name: "WhatNFT",
         type: "address",
       },
     ],
-    name: "EditNonFun",
+    name: "EditNFT",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -97,7 +78,46 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "EditToken",
+    name: "EditRewardToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "Limit",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "LockingPeriod",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "contract ERC20",
+        name: "WhatToken",
+        type: "address",
+      },
+    ],
+    name: "SetDepositToken",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -105,24 +125,17 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint256",
-        name: "HowManyBlocks",
-        type: "uint256",
+        internalType: "address",
+        name: "",
+        type: "address",
       },
     ],
-    name: "EditWithdrawTime",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "MinimumTime",
+    name: "Staked",
     outputs: [
       {
-        internalType: "uint256",
+        internalType: "bool",
         name: "",
-        type: "uint256",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -136,7 +149,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "PendingReward",
+    name: "StakedTokens",
     outputs: [
       {
         internalType: "uint256",
@@ -145,32 +158,6 @@ const _abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "RewardFactor",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "Stake",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -187,14 +174,8 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "TimeClaim",
+    inputs: [],
+    name: "VaultReward",
     outputs: [
       {
         internalType: "uint256",
@@ -206,60 +187,17 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "TimeFactor",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
+    inputs: [],
+    name: "claim",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "TimeStaked",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    name: "TokensStaked",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
+    inputs: [],
+    name: "claimAndWithdraw",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -270,71 +208,19 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "Unstake",
+    name: "deposit",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [],
-    name: "WithdrawTime",
+    name: "totalStaked",
     outputs: [
       {
         internalType: "uint256",
         name: "",
         type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "admin",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "claimRewards",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "displayTotalStaked",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    name: "user",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
       },
     ],
     stateMutability: "view",

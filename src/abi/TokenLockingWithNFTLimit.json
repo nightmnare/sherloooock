@@ -2,80 +2,73 @@
   "abi": [
     { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" },
     {
-      "inputs": [{ "internalType": "address", "name": "YourAddress", "type": "address" }],
-      "name": "CalculateDailyReward",
+      "inputs": [{ "internalType": "address", "name": "Who", "type": "address" }],
+      "name": "CalculateReward",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "YourAddress", "type": "address" }],
-      "name": "CheckRewards",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "uint256", "name": "BPSperDay", "type": "uint256" }],
-      "name": "EditEmission",
+      "inputs": [{ "internalType": "uint256", "name": "HowManyTokens", "type": "uint256" }],
+      "name": "EditLockReward",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [{ "internalType": "uint256", "name": "HowManyBlocks", "type": "uint256" }],
-      "name": "EditMinimumStakeTime",
+      "name": "EditLockingPeriod",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [{ "internalType": "contract ERC721", "name": "WhatERC721", "type": "address" }],
-      "name": "EditNonFun",
+      "inputs": [{ "internalType": "contract ERC721", "name": "WhatNFT", "type": "address" }],
+      "name": "EditNFT",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [{ "internalType": "contract ERC20", "name": "WhatToken", "type": "address" }],
-      "name": "EditToken",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "uint256", "name": "HowManyBlocks", "type": "uint256" }],
-      "name": "EditWithdrawTime",
+      "name": "EditRewardToken",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "MinimumTime",
+      "name": "Limit",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "LockingPeriod",
+      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "contract ERC20", "name": "WhatToken", "type": "address" }],
+      "name": "SetDepositToken",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+      "name": "Staked",
+      "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
       "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "name": "PendingReward",
+      "name": "StakedTokens",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "RewardFactor",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }],
-      "name": "Stake",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -86,66 +79,25 @@
       "type": "function"
     },
     {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "name": "TimeClaim",
+      "inputs": [],
+      "name": "VaultReward",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
       "stateMutability": "view",
       "type": "function"
     },
-    {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "name": "TimeFactor",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "name": "TimeStaked",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "name": "TokensStaked",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
+    { "inputs": [], "name": "claim", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [], "name": "claimAndWithdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
     {
       "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }],
-      "name": "Unstake",
+      "name": "deposit",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
       "inputs": [],
-      "name": "WithdrawTime",
+      "name": "totalStaked",
       "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "admin",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    { "inputs": [], "name": "claimRewards", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
-    {
-      "inputs": [],
-      "name": "displayTotalStaked",
-      "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-      "name": "user",
-      "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
       "stateMutability": "view",
       "type": "function"
     }

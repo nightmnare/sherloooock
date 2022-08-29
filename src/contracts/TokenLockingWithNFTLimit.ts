@@ -20,75 +20,57 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common"
 export interface TokenLockingWithNFTLimitInterface extends utils.Interface {
   contractName: "TokenLockingWithNFTLimit"
   functions: {
-    "CalculateDailyReward(address)": FunctionFragment
-    "CheckRewards(address)": FunctionFragment
-    "EditEmission(uint256)": FunctionFragment
-    "EditMinimumStakeTime(uint256)": FunctionFragment
-    "EditNonFun(address)": FunctionFragment
-    "EditToken(address)": FunctionFragment
-    "EditWithdrawTime(uint256)": FunctionFragment
-    "MinimumTime()": FunctionFragment
-    "PendingReward(address)": FunctionFragment
-    "RewardFactor()": FunctionFragment
-    "Stake(uint256)": FunctionFragment
+    "CalculateReward(address)": FunctionFragment
+    "EditLockReward(uint256)": FunctionFragment
+    "EditLockingPeriod(uint256)": FunctionFragment
+    "EditNFT(address)": FunctionFragment
+    "EditRewardToken(address)": FunctionFragment
+    "Limit()": FunctionFragment
+    "LockingPeriod()": FunctionFragment
+    "SetDepositToken(address)": FunctionFragment
+    "Staked(address)": FunctionFragment
+    "StakedTokens(address)": FunctionFragment
     "SweepToken(address)": FunctionFragment
-    "TimeClaim(address)": FunctionFragment
-    "TimeFactor(address)": FunctionFragment
-    "TimeStaked(address)": FunctionFragment
-    "TokensStaked(address)": FunctionFragment
-    "Unstake(uint256)": FunctionFragment
-    "WithdrawTime()": FunctionFragment
-    "admin()": FunctionFragment
-    "claimRewards()": FunctionFragment
-    "displayTotalStaked()": FunctionFragment
-    "user(uint256)": FunctionFragment
+    "VaultReward()": FunctionFragment
+    "claim()": FunctionFragment
+    "claimAndWithdraw()": FunctionFragment
+    "deposit(uint256)": FunctionFragment
+    "totalStaked()": FunctionFragment
   }
 
-  encodeFunctionData(functionFragment: "CalculateDailyReward", values: [string]): string
-  encodeFunctionData(functionFragment: "CheckRewards", values: [string]): string
-  encodeFunctionData(functionFragment: "EditEmission", values: [BigNumberish]): string
-  encodeFunctionData(functionFragment: "EditMinimumStakeTime", values: [BigNumberish]): string
-  encodeFunctionData(functionFragment: "EditNonFun", values: [string]): string
-  encodeFunctionData(functionFragment: "EditToken", values: [string]): string
-  encodeFunctionData(functionFragment: "EditWithdrawTime", values: [BigNumberish]): string
-  encodeFunctionData(functionFragment: "MinimumTime", values?: undefined): string
-  encodeFunctionData(functionFragment: "PendingReward", values: [string]): string
-  encodeFunctionData(functionFragment: "RewardFactor", values?: undefined): string
-  encodeFunctionData(functionFragment: "Stake", values: [BigNumberish]): string
+  encodeFunctionData(functionFragment: "CalculateReward", values: [string]): string
+  encodeFunctionData(functionFragment: "EditLockReward", values: [BigNumberish]): string
+  encodeFunctionData(functionFragment: "EditLockingPeriod", values: [BigNumberish]): string
+  encodeFunctionData(functionFragment: "EditNFT", values: [string]): string
+  encodeFunctionData(functionFragment: "EditRewardToken", values: [string]): string
+  encodeFunctionData(functionFragment: "Limit", values?: undefined): string
+  encodeFunctionData(functionFragment: "LockingPeriod", values?: undefined): string
+  encodeFunctionData(functionFragment: "SetDepositToken", values: [string]): string
+  encodeFunctionData(functionFragment: "Staked", values: [string]): string
+  encodeFunctionData(functionFragment: "StakedTokens", values: [string]): string
   encodeFunctionData(functionFragment: "SweepToken", values: [string]): string
-  encodeFunctionData(functionFragment: "TimeClaim", values: [string]): string
-  encodeFunctionData(functionFragment: "TimeFactor", values: [string]): string
-  encodeFunctionData(functionFragment: "TimeStaked", values: [string]): string
-  encodeFunctionData(functionFragment: "TokensStaked", values: [string]): string
-  encodeFunctionData(functionFragment: "Unstake", values: [BigNumberish]): string
-  encodeFunctionData(functionFragment: "WithdrawTime", values?: undefined): string
-  encodeFunctionData(functionFragment: "admin", values?: undefined): string
-  encodeFunctionData(functionFragment: "claimRewards", values?: undefined): string
-  encodeFunctionData(functionFragment: "displayTotalStaked", values?: undefined): string
-  encodeFunctionData(functionFragment: "user", values: [BigNumberish]): string
+  encodeFunctionData(functionFragment: "VaultReward", values?: undefined): string
+  encodeFunctionData(functionFragment: "claim", values?: undefined): string
+  encodeFunctionData(functionFragment: "claimAndWithdraw", values?: undefined): string
+  encodeFunctionData(functionFragment: "deposit", values: [BigNumberish]): string
+  encodeFunctionData(functionFragment: "totalStaked", values?: undefined): string
 
-  decodeFunctionResult(functionFragment: "CalculateDailyReward", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "CheckRewards", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "EditEmission", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "EditMinimumStakeTime", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "EditNonFun", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "EditToken", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "EditWithdrawTime", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "MinimumTime", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "PendingReward", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "RewardFactor", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "Stake", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "CalculateReward", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "EditLockReward", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "EditLockingPeriod", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "EditNFT", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "EditRewardToken", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "Limit", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "LockingPeriod", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "SetDepositToken", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "Staked", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "StakedTokens", data: BytesLike): Result
   decodeFunctionResult(functionFragment: "SweepToken", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "TimeClaim", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "TimeFactor", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "TimeStaked", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "TokensStaked", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "Unstake", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "WithdrawTime", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "admin", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "claimRewards", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "displayTotalStaked", data: BytesLike): Result
-  decodeFunctionResult(functionFragment: "user", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "VaultReward", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "claimAndWithdraw", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "totalStaked", data: BytesLike): Result
 
   events: {}
 }
@@ -117,310 +99,232 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
   removeListener: OnEvent<this>
 
   functions: {
-    CalculateDailyReward(YourAddress: string, overrides?: CallOverrides): Promise<[BigNumber]>
+    CalculateReward(Who: string, overrides?: CallOverrides): Promise<[BigNumber]>
 
-    CheckRewards(YourAddress: string, overrides?: CallOverrides): Promise<[BigNumber]>
-
-    EditEmission(
-      BPSperDay: BigNumberish,
+    EditLockReward(
+      HowManyTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    EditMinimumStakeTime(
+    EditLockingPeriod(
       HowManyBlocks: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    EditNonFun(
-      WhatERC721: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    EditNFT(WhatNFT: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-    EditToken(
+    EditRewardToken(
       WhatToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    EditWithdrawTime(
-      HowManyBlocks: BigNumberish,
+    Limit(overrides?: CallOverrides): Promise<[BigNumber]>
+
+    LockingPeriod(overrides?: CallOverrides): Promise<[BigNumber]>
+
+    SetDepositToken(
+      WhatToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    MinimumTime(overrides?: CallOverrides): Promise<[BigNumber]>
+    Staked(arg0: string, overrides?: CallOverrides): Promise<[boolean]>
 
-    PendingReward(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
-
-    RewardFactor(overrides?: CallOverrides): Promise<[BigNumber]>
-
-    Stake(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>
+    StakedTokens(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
 
     SweepToken(
       TokenAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    TimeClaim(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
+    VaultReward(overrides?: CallOverrides): Promise<[BigNumber]>
 
-    TimeFactor(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
+    claim(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-    TimeStaked(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
+    claimAndWithdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-    TokensStaked(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>
-
-    Unstake(
+    deposit(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>
 
-    WithdrawTime(overrides?: CallOverrides): Promise<[BigNumber]>
-
-    admin(overrides?: CallOverrides): Promise<[string]>
-
-    claimRewards(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-    displayTotalStaked(overrides?: CallOverrides): Promise<[BigNumber]>
-
-    user(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>
+    totalStaked(overrides?: CallOverrides): Promise<[BigNumber]>
   }
 
-  CalculateDailyReward(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+  CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
 
-  CheckRewards(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-  EditEmission(
-    BPSperDay: BigNumberish,
+  EditLockReward(
+    HowManyTokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  EditMinimumStakeTime(
+  EditLockingPeriod(
     HowManyBlocks: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  EditNonFun(
-    WhatERC721: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>
+  EditNFT(WhatNFT: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-  EditToken(
+  EditRewardToken(
     WhatToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  EditWithdrawTime(
-    HowManyBlocks: BigNumberish,
+  Limit(overrides?: CallOverrides): Promise<BigNumber>
+
+  LockingPeriod(overrides?: CallOverrides): Promise<BigNumber>
+
+  SetDepositToken(
+    WhatToken: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  MinimumTime(overrides?: CallOverrides): Promise<BigNumber>
+  Staked(arg0: string, overrides?: CallOverrides): Promise<boolean>
 
-  PendingReward(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
-
-  RewardFactor(overrides?: CallOverrides): Promise<BigNumber>
-
-  Stake(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
+  StakedTokens(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
 
   SweepToken(
     TokenAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  TimeClaim(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+  VaultReward(overrides?: CallOverrides): Promise<BigNumber>
 
-  TimeFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+  claim(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-  TimeStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+  claimAndWithdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
 
-  TokensStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
-
-  Unstake(
+  deposit(
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>
 
-  WithdrawTime(overrides?: CallOverrides): Promise<BigNumber>
-
-  admin(overrides?: CallOverrides): Promise<string>
-
-  claimRewards(overrides?: Overrides & { from?: string | Promise<string> }): Promise<ContractTransaction>
-
-  displayTotalStaked(overrides?: CallOverrides): Promise<BigNumber>
-
-  user(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+  totalStaked(overrides?: CallOverrides): Promise<BigNumber>
 
   callStatic: {
-    CalculateDailyReward(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+    CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
 
-    CheckRewards(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+    EditLockReward(HowManyTokens: BigNumberish, overrides?: CallOverrides): Promise<void>
 
-    EditEmission(BPSperDay: BigNumberish, overrides?: CallOverrides): Promise<void>
+    EditLockingPeriod(HowManyBlocks: BigNumberish, overrides?: CallOverrides): Promise<void>
 
-    EditMinimumStakeTime(HowManyBlocks: BigNumberish, overrides?: CallOverrides): Promise<void>
+    EditNFT(WhatNFT: string, overrides?: CallOverrides): Promise<void>
 
-    EditNonFun(WhatERC721: string, overrides?: CallOverrides): Promise<void>
+    EditRewardToken(WhatToken: string, overrides?: CallOverrides): Promise<void>
 
-    EditToken(WhatToken: string, overrides?: CallOverrides): Promise<void>
+    Limit(overrides?: CallOverrides): Promise<BigNumber>
 
-    EditWithdrawTime(HowManyBlocks: BigNumberish, overrides?: CallOverrides): Promise<void>
+    LockingPeriod(overrides?: CallOverrides): Promise<BigNumber>
 
-    MinimumTime(overrides?: CallOverrides): Promise<BigNumber>
+    SetDepositToken(WhatToken: string, overrides?: CallOverrides): Promise<void>
 
-    PendingReward(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    Staked(arg0: string, overrides?: CallOverrides): Promise<boolean>
 
-    RewardFactor(overrides?: CallOverrides): Promise<BigNumber>
-
-    Stake(amount: BigNumberish, overrides?: CallOverrides): Promise<void>
+    StakedTokens(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
 
     SweepToken(TokenAddress: string, overrides?: CallOverrides): Promise<void>
 
-    TimeClaim(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    VaultReward(overrides?: CallOverrides): Promise<BigNumber>
 
-    TimeFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    claim(overrides?: CallOverrides): Promise<void>
 
-    TimeStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    claimAndWithdraw(overrides?: CallOverrides): Promise<void>
 
-    TokensStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    deposit(amount: BigNumberish, overrides?: CallOverrides): Promise<void>
 
-    Unstake(amount: BigNumberish, overrides?: CallOverrides): Promise<void>
-
-    WithdrawTime(overrides?: CallOverrides): Promise<BigNumber>
-
-    admin(overrides?: CallOverrides): Promise<string>
-
-    claimRewards(overrides?: CallOverrides): Promise<void>
-
-    displayTotalStaked(overrides?: CallOverrides): Promise<BigNumber>
-
-    user(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>
+    totalStaked(overrides?: CallOverrides): Promise<BigNumber>
   }
 
   filters: {}
 
   estimateGas: {
-    CalculateDailyReward(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+    CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
 
-    CheckRewards(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
-
-    EditEmission(
-      BPSperDay: BigNumberish,
+    EditLockReward(
+      HowManyTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>
 
-    EditMinimumStakeTime(
+    EditLockingPeriod(
       HowManyBlocks: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>
 
-    EditNonFun(WhatERC721: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
+    EditNFT(WhatNFT: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    EditToken(WhatToken: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
+    EditRewardToken(WhatToken: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    EditWithdrawTime(
-      HowManyBlocks: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>
+    Limit(overrides?: CallOverrides): Promise<BigNumber>
 
-    MinimumTime(overrides?: CallOverrides): Promise<BigNumber>
+    LockingPeriod(overrides?: CallOverrides): Promise<BigNumber>
 
-    PendingReward(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    SetDepositToken(WhatToken: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    RewardFactor(overrides?: CallOverrides): Promise<BigNumber>
+    Staked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
 
-    Stake(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
+    StakedTokens(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
 
     SweepToken(TokenAddress: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    TimeClaim(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    VaultReward(overrides?: CallOverrides): Promise<BigNumber>
 
-    TimeFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    claim(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    TimeStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    claimAndWithdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    TokensStaked(arg0: string, overrides?: CallOverrides): Promise<BigNumber>
+    deposit(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
 
-    Unstake(amount: BigNumberish, overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-    WithdrawTime(overrides?: CallOverrides): Promise<BigNumber>
-
-    admin(overrides?: CallOverrides): Promise<BigNumber>
-
-    claimRewards(overrides?: Overrides & { from?: string | Promise<string> }): Promise<BigNumber>
-
-    displayTotalStaked(overrides?: CallOverrides): Promise<BigNumber>
-
-    user(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>
+    totalStaked(overrides?: CallOverrides): Promise<BigNumber>
   }
 
   populateTransaction: {
-    CalculateDailyReward(YourAddress: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+    CalculateReward(Who: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    CheckRewards(YourAddress: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    EditEmission(
-      BPSperDay: BigNumberish,
+    EditLockReward(
+      HowManyTokens: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    EditMinimumStakeTime(
+    EditLockingPeriod(
       HowManyBlocks: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    EditNonFun(
-      WhatERC721: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    EditNFT(WhatNFT: string, overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
 
-    EditToken(
+    EditRewardToken(
       WhatToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    EditWithdrawTime(
-      HowManyBlocks: BigNumberish,
+    Limit(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    LockingPeriod(overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    SetDepositToken(
+      WhatToken: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    MinimumTime(overrides?: CallOverrides): Promise<PopulatedTransaction>
+    Staked(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    PendingReward(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    RewardFactor(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    Stake(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>
+    StakedTokens(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     SweepToken(
       TokenAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    TimeClaim(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+    VaultReward(overrides?: CallOverrides): Promise<PopulatedTransaction>
 
-    TimeFactor(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+    claim(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
 
-    TimeStaked(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+    claimAndWithdraw(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
 
-    TokensStaked(arg0: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    Unstake(
+    deposit(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>
 
-    WithdrawTime(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    admin(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    claimRewards(overrides?: Overrides & { from?: string | Promise<string> }): Promise<PopulatedTransaction>
-
-    displayTotalStaked(overrides?: CallOverrides): Promise<PopulatedTransaction>
-
-    user(arg0: BigNumberish, overrides?: CallOverrides): Promise<PopulatedTransaction>
+    totalStaked(overrides?: CallOverrides): Promise<PopulatedTransaction>
   }
 }
