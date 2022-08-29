@@ -2,7 +2,6 @@ import { ethers } from "ethers"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useAccount } from "wagmi"
 
-import { useSherClaimContract } from "../../hooks/useSherClaimContract"
 import { useFundraisePosition } from "../../hooks/api/useFundraisePosition"
 
 import { Box } from "../../components/Box"
@@ -18,7 +17,6 @@ import { formatAmount } from "../../utils/format"
 
 export const FundraisingClaimPage = () => {
   const accountData = useAccount()
-  const sherClaim = useSherClaimContract()
   /**
    * Custom hook for fetching fundraise position from Indexer API
    */
@@ -38,33 +36,6 @@ export const FundraisingClaimPage = () => {
       getFundraisePosition(accountData.address)
     }
   }, [accountData?.address, getFundraisePosition])
-
-  /**
-   * Fetch claim is active or not from smart contract
-   */
-  useEffect(() => {
-    const fetchClaimIsActive = async () => {
-      try {
-        const isActive = await sherClaim.claimIsActive()
-        setClaimIsActive(isActive)
-      } catch (error) {
-        console.error(error)
-        setClaimIsActive(false)
-      }
-    }
-
-    fetchClaimIsActive()
-  })
-
-  const handleClaim = useCallback(async () => {
-    try {
-      const txReceipt = await sherClaim.claim()
-      console.log(txReceipt)
-      accountData?.address && getFundraisePosition(accountData.address)
-    } catch (error) {
-      console.log(error)
-    }
-  }, [accountData?.address, sherClaim, getFundraisePosition])
 
   const claimStartString = useMemo(() => {
     return (
@@ -139,9 +110,7 @@ export const FundraisingClaimPage = () => {
               </Column>
             </Row>
             <Row alignment="center">
-              <Button onClick={handleClaim} disabled={!claimIsActive}>
-                Claim
-              </Button>
+              <Button disabled={!claimIsActive}>Claim</Button>
             </Row>
           </Column>
         </Row>

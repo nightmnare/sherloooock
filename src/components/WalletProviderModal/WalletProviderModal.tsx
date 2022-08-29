@@ -1,7 +1,6 @@
 import React from "react"
-import { defaultChains, useAccount, useConnect } from "wagmi"
+import { useAccount, useConnect } from "wagmi"
 import { InjectedConnector } from "wagmi/connectors/injected"
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect"
 import Modal from "../Modal/Modal"
 import styles from "./WalletProviderModal.module.scss"
 import { ReactComponent as Metamask } from "../../assets/icons/metamask.svg"

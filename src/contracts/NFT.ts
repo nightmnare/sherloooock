@@ -51,8 +51,8 @@ export declare namespace IDropClaimCondition {
   }
 }
 
-export interface TokenInterface extends utils.Interface {
-  contractName: "Token"
+export interface NFTInterface extends utils.Interface {
+  contractName: "NFT"
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment
     "approve(address,uint256)": FunctionFragment
@@ -416,13 +416,13 @@ export type WalletClaimCountUpdatedEvent = TypedEvent<[string, BigNumber], { wal
 
 export type WalletClaimCountUpdatedEventFilter = TypedEventFilter<WalletClaimCountUpdatedEvent>
 
-export interface Token extends BaseContract {
-  contractName: "Token"
+export interface NFT extends BaseContract {
+  contractName: "NFT"
   connect(signerOrProvider: Signer | Provider | string): this
   attach(addressOrName: string): this
   deployed(): Promise<this>
 
-  interface: TokenInterface
+  interface: NFTInterface
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

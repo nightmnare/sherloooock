@@ -4,7 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers"
 import { Provider } from "@ethersproject/providers"
-import type { Token, TokenInterface } from "../Token"
+import type { NFT, NFTInterface } from "../NFT"
 
 const _abi = [
   {
@@ -1851,12 +1851,12 @@ const _abi = [
   },
 ]
 
-export class Token__factory {
+export class NFT__factory {
   static readonly abi = _abi
-  static createInterface(): TokenInterface {
-    return new utils.Interface(_abi) as TokenInterface
+  static createInterface(): NFTInterface {
+    return new utils.Interface(_abi) as NFTInterface
   }
-  static connect(address: string, signerOrProvider: Signer | Provider): Token {
-    return new Contract(address, _abi, signerOrProvider) as Token
+  static connect(address: string, signerOrProvider: Signer | Provider): NFT {
+    return new Contract(address, _abi, signerOrProvider) as NFT
   }
 }

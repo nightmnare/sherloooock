@@ -2,17 +2,7 @@ import { Config } from "./ConfigType"
 
 export const config: Config = {
   networkId: parseInt(process.env.REACT_APP_NETWORK_ID as string),
-  localNetworkId: parseInt(process.env.REACT_APP_LOCALHOST_NETWORK_ID as string),
-  sherBuyEntryDeadline: parseInt(process.env.REACT_APP_SHER_BUY_ENTRY_DEADLINE as string),
-  alchemyApiUrl: process.env.REACT_APP_ALCHEMY_API_URL as string,
-  indexerBaseUrl: process.env.REACT_APP_INDEXER_BASE_URL as string,
-  sherlockAddress: process.env.REACT_APP_SHERLOCK_ADDRESS as string,
-  sherlockProtocolManagerAddress: process.env.REACT_APP_SHERLOCK_PROTOCOL_MANAGER_ADDRESS as string,
-  sherAddress: process.env.REACT_APP_SHER_ADDRESS as string,
-  sherBuyAddress: process.env.REACT_APP_SHER_BUY_ADDRESS as string,
-  sherClaimAddress: process.env.REACT_APP_SHER_CLAIM_ADDRESS as string,
-  sherDistributionManagerAddress: process.env.REACT_APP_SHER_DIST_MANAGER_ADDRESS as string,
   usdcAddress: process.env.REACT_APP_USDC_ADDRESS as string,
-  countdownStartTimestamp: parseInt(process.env.REACT_APP_COUNTDOWN_START_TIMESTAMP as string),
-  countdownEndTimestamp: parseInt(process.env.REACT_APP_COUNTDOWN_END_TIMESTAMP as string),
+  stakingOneAddress: process.env.REACT_APP_STAKING_ONE_ADDRESS as string,
+  stakingTwoAddress: process.env.REACT_APP_STAKING_TWO_ADDRESS as string,
 }

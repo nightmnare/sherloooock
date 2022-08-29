@@ -13,10 +13,6 @@ import config from "../config"
 const TokenData = {
   USDC: {
     contract: config.usdcAddress,
-    decimals: 6,
-  },
-  SHER: {
-    contract: config.sherAddress,
     decimals: 18,
   },
 }
@@ -34,7 +30,7 @@ const useERC20 = (token: AvailableERC20Tokens) => {
     // throw Error("Address or token name required")
   }
 
-  const decimals = TokenData[token].decimals
+  const [decimals, setDecimals] = React.useState<number>(18)
   const [balance, setBalance] = React.useState<BigNumber>()
   const [allowances, setAllowances] = React.useState<{ [key: string]: BigNumber }>({})
 
@@ -48,14 +44,15 @@ const useERC20 = (token: AvailableERC20Tokens) => {
     contractInterface: ERC20ABI.abi,
   })
 
+  React.useEffect(() => {
+    contract.decimals().then((res) => setDecimals(res))
+  }, [contract])
+
   /**
    * Refresh token balance
    */
   const refreshBalance = React.useCallback(async () => {
-    if (!accountData?.address) {
-      return
-    }
-
+    if (!accountData?.address) return
     const latestBalance = await contract.balanceOf(accountData?.address)
     setBalance(latestBalance)
   }, [contract, accountData?.address])
@@ -75,13 +72,9 @@ const useERC20 = (token: AvailableERC20Tokens) => {
    */
   const getAllowance = React.useCallback(
     async (address: string, invalidateCache?: boolean) => {
-      if (!accountData?.address || !address) {
-        return
-      }
+      if (!accountData?.address || !address) return
 
-      if (!invalidateCache && allowances[address]) {
-        return allowances[address]
-      }
+      if (!invalidateCache && allowances[address]) return allowances[address]
 
       const lastAllowance = await contract.allowance(accountData?.address, address)
       setAllowances({ ...allowances, [address]: lastAllowance })

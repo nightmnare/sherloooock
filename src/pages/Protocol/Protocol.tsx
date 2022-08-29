@@ -1,7 +1,6 @@
 import { BigNumber, ethers } from "ethers"
 import React from "react"
 import ProtocolBalanceInput from "../../components/ProtocolBalanceInput/ProtocolBalanceInput"
-import useProtocolManager from "../../hooks/useProtocolManager"
 import styles from "./Protocol.module.scss"
 import { convertSecondsToDurationString } from "../../utils/time"
 import AllowanceGate from "../../components/AllowanceGate/AllowanceGate"
@@ -44,9 +43,6 @@ export const ProtocolPage: React.FC = () => {
    * Amount to add to/remove from active balance
    */
   const [amount, setAmount] = React.useState<BigNumber>()
-
-  const { address, getProtocolActiveBalance, getProtocolCoverageLeft, depositActiveBalance, withdrawActiveBalance } =
-    useProtocolManager()
   const { balance: usdcBalance } = useERC20("USDC")
   const { waitForTx } = useWaitTx()
 
@@ -60,42 +56,42 @@ export const ProtocolPage: React.FC = () => {
   /**
    * Fetch latest protocol details: active balance, coverage left and premium
    */
-  const fetchProtocolDetails = React.useCallback(async () => {
-    if (!selectedProtocolId) {
-      return
-    }
+  // const fetchProtocolDetails = React.useCallback(async () => {
+  //   if (!selectedProtocolId) {
+  //     return
+  //   }
 
-    const protocolBalance = await getProtocolActiveBalance(selectedProtocolId)
-    setBalance(protocolBalance)
+  //   const protocolBalance = await getProtocolActiveBalance(selectedProtocolId)
+  //   setBalance(protocolBalance)
 
-    const protocolCoverageleft = await getProtocolCoverageLeft(selectedProtocolId)
-    setCoverageLeft(protocolCoverageleft)
-  }, [selectedProtocolId, getProtocolActiveBalance, getProtocolCoverageLeft])
+  //   const protocolCoverageleft = await getProtocolCoverageLeft(selectedProtocolId)
+  //   setCoverageLeft(protocolCoverageleft)
+  // }, [selectedProtocolId, getProtocolActiveBalance, getProtocolCoverageLeft])
 
   /**
    * Add balance to selected protocol
    */
-  const handleAddBalance = React.useCallback(async () => {
-    if (!amount || !selectedProtocolId) {
-      return
-    }
+  // const handleAddBalance = React.useCallback(async () => {
+  //   if (!amount || !selectedProtocolId) {
+  //     return
+  //   }
 
-    await waitForTx(async () => await depositActiveBalance(selectedProtocolId, amount))
-  }, [amount, selectedProtocolId, depositActiveBalance, waitForTx])
+  //   await waitForTx(async () => await depositActiveBalance(selectedProtocolId, amount))
+  // }, [amount, selectedProtocolId, depositActiveBalance, waitForTx])
 
   /**
    * Remove balance from selected protocol
    */
-  const handleRemoveBalance = React.useCallback(async () => {
-    if (!amount || !selectedProtocolId) {
-      return
-    }
+  // const handleRemoveBalance = React.useCallback(async () => {
+  //   if (!amount || !selectedProtocolId) {
+  //     return
+  //   }
 
-    await waitForTx(async () => await withdrawActiveBalance(selectedProtocolId, amount))
+  //   await waitForTx(async () => await withdrawActiveBalance(selectedProtocolId, amount))
 
-    fetchProtocolDetails()
-    setAmount(undefined)
-  }, [amount, selectedProtocolId, withdrawActiveBalance, fetchProtocolDetails, waitForTx])
+  //   fetchProtocolDetails()
+  //   setAmount(undefined)
+  // }, [amount, selectedProtocolId, withdrawActiveBalance, fetchProtocolDetails, waitForTx])
 
   /**
    * Handle the inputted amount changed event
@@ -113,9 +109,9 @@ export const ProtocolPage: React.FC = () => {
   }, [getCoveredProtocols])
 
   // Fetch protocol coverage information
-  React.useEffect(() => {
-    fetchProtocolDetails()
-  }, [fetchProtocolDetails])
+  // React.useEffect(() => {
+  //   fetchProtocolDetails()
+  // }, [fetchProtocolDetails])
 
   const maxClaimableAmount = React.useMemo(() => {
     if (selectedProtocol) {
@@ -200,7 +196,7 @@ export const ProtocolPage: React.FC = () => {
                 <Row alignment="center">
                   <ConnectGate>
                     <Column grow={1} alignment="start" spacing="m">
-                      <AllowanceGate
+                      {/* <AllowanceGate
                         amount={amount}
                         spender={address}
                         actionName="Add Balance"
@@ -215,7 +211,7 @@ export const ProtocolPage: React.FC = () => {
                             </Button>
                           </Column>
                         </Row>
-                      )}
+                      )} */}
                     </Column>
                   </ConnectGate>
                 </Row>

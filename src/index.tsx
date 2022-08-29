@@ -23,17 +23,15 @@ root.render(
     <SentryErrorBoundary>
       <BrowserRouter>
         <WagmiProvider>
-          <ApolloProvider>
-            <TxWaitProvider>
-              <FundraisePositionProvider>
-                <StakingPositionsProvider>
-                  <CoveredProtocolsProvider>
-                    <App />
-                  </CoveredProtocolsProvider>
-                </StakingPositionsProvider>
-              </FundraisePositionProvider>
-            </TxWaitProvider>
-          </ApolloProvider>
+          <TxWaitProvider>
+            <FundraisePositionProvider>
+              <StakingPositionsProvider>
+                <CoveredProtocolsProvider>
+                  <App />
+                </CoveredProtocolsProvider>
+              </StakingPositionsProvider>
+            </FundraisePositionProvider>
+          </TxWaitProvider>
         </WagmiProvider>
       </BrowserRouter>
     </SentryErrorBoundary>

@@ -10,8 +10,6 @@ import { Title } from "../../components/Title"
 import { Text } from "../../components/Text"
 import { Column, Row } from "../../components/Layout"
 
-import { useSherBuyContract } from "../../hooks/useSherBuyContract"
-import { useSherClaimContract } from "../../hooks/useSherClaimContract"
 import useERC20 from "../../hooks/useERC20"
 import ConnectGate from "../../components/ConnectGate/ConnectGate"
 import useWaitTx from "../../hooks/useWaitTx"
@@ -40,9 +38,6 @@ type Rewards = {
 
 export const FundraisingPage: React.FC = () => {
   const navigate = useNavigate()
-  const sherBuyContract = useSherBuyContract()
-  const sherClaimContract = useSherClaimContract()
-  const sher = useERC20("SHER")
   const { balance: usdcBalance } = useERC20("USDC")
   const { waitForTx } = useWaitTx()
 
@@ -50,12 +45,6 @@ export const FundraisingPage: React.FC = () => {
    * User input. Amount of USDC willing to pay.
    */
   const [usdcInput, setUsdcInput] = useState<BigNumber>()
-  const [debouncedUsdcInput] = useDebounce(usdcInput, 500)
-
-  /**
-   * Ratio: converts USDC to amount of SHER available for claim.
-   */
-  const [usdcToSherRewardRatio, setUsdcToSherRewardRatio] = useState<number>()
 
   /**
    * Fundraise deadline. USDC payments won't be accepted afterwards.
@@ -73,88 +62,6 @@ export const FundraisingPage: React.FC = () => {
    */
   const [rewards, setRewards] = useState<Rewards>()
 
-  /**
-   * Fetch ratio to convert between USDC and SHER.
-   */
-  useEffect(() => {
-    const fetchConversionRatio = async () => {
-      try {
-        const ratio = await sherBuyContract.getUsdcToSherRewardRatio
-        setUsdcToSherRewardRatio(ratio)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchConversionRatio()
-  }, [sherBuyContract, setUsdcToSherRewardRatio])
-
-  /**
-   * Fetch fundraise event deadline.
-   */
-  useEffect(() => {
-    const fetchDeadlineData = async () => {
-      try {
-        const deadline = await sherClaimContract.getClaimableAt()
-        setDeadline(deadline)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchDeadlineData()
-  }, [sherClaimContract])
-
-  /**
-   * Fetch amount of SHER remaining.
-   */
-  useEffect(() => {
-    const fetchAmountRemaining = async () => {
-      try {
-        const sherAmount = await sher.getBalanceOf(sherBuyContract.address)
-        setSherRemaining(sherAmount)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    fetchAmountRemaining()
-  }, [sher, sherBuyContract.address, setSherRemaining])
-
-  /**
-   * Calculate rewards when debounced usdcInput changes (user stopped writing).
-   */
-  useEffect(() => {
-    const calculateRewards = async () => {
-      if (!debouncedUsdcInput || !usdcToSherRewardRatio || debouncedUsdcInput.isZero()) {
-        setRewards(undefined)
-        return
-      }
-
-      setIsLoadingRewards(true)
-
-      try {
-        // From USDC to SHER (6 to 18 decimals) is 10**12
-        // But ratio is 0.1, (1 USDC == 0.1 SHER)
-        // So 10**11 for direct conversion
-        const sherAmountWantedAsBigNumber = debouncedUsdcInput.mul(10 ** 11)
-
-        const { sherAmount, stake, price } = await sherBuyContract.getCapitalRequirements(sherAmountWantedAsBigNumber)
-
-        setRewards({
-          sherAmount,
-          stake,
-          price,
-        })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoadingRewards(false)
-      }
-    }
-    calculateRewards()
-  }, [debouncedUsdcInput, setIsLoadingRewards, usdcToSherRewardRatio, setRewards, sherBuyContract])
-
   const handleUsdcChange = (value: BigNumber | undefined) => {
     if (!value) {
       setRewards(undefined)
@@ -165,15 +72,6 @@ export const FundraisingPage: React.FC = () => {
 
   const handleExecute = async () => {
     if (!rewards?.sherAmount) return
-
-    try {
-      await waitForTx(async () => await sherBuyContract.execute(rewards?.sherAmount), {
-        transactionType: TxType.EXECUTE,
-      })
-      navigate("/fundraiseclaim")
-    } catch (error) {
-      console.error(error)
-    }
   }
 
   const eventEndsString = useMemo(() => {
@@ -210,7 +108,7 @@ export const FundraisingPage: React.FC = () => {
           </Row>
           <Row className={styles.rewardsContainer}>
             <Column grow={1} spacing="l">
-              <TokenInput onChange={handleUsdcChange} token="USDC" placeholder="Choose amount" balance={usdcBalance} />
+              {/* <TokenInput onChange={handleUsdcChange} token="USDC" placeholder="Choose amount" balance={usdcBalance} /> */}
               {rewards && (
                 <Row>
                   <Column grow={1} spacing="m">
@@ -240,16 +138,6 @@ export const FundraisingPage: React.FC = () => {
                       <Column className={styles.strong}>
                         <Text strong>{`${utils.commify(utils.formatUnits(rewards.sherAmount, 18))} SHER`}</Text>
                       </Column>
-                    </Row>
-                    <Row alignment="center">
-                      <ConnectGate>
-                        <AllowanceGate
-                          spender={sherBuyContract.address}
-                          amount={usdcInput ?? BigNumber.from(0)}
-                          actionName="Execute"
-                          action={handleExecute}
-                        ></AllowanceGate>
-                      </ConnectGate>
                     </Row>
                   </Column>
                 </Row>

@@ -31,7 +31,7 @@ interface Props {
   /**
    * On Click event handler
    */
-  action: () => void
+  action: () => Promise<void>
 
   /**
    * On Succes event handler

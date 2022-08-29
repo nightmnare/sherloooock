@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers"
 import React from "react"
-import { useDebounce } from "use-debounce"
+import { useDebounce, useDebouncedCallback, useThrottledCallback } from "use-debounce"
 import { useAccount } from "wagmi"
 import AllowanceGate from "../../components/AllowanceGate/AllowanceGate"
 import { Box } from "../../components/Box"
@@ -12,14 +12,15 @@ import { Title } from "../../components/Title"
 import TokenInput from "../../components/TokenInput/TokenInput"
 import { useStakingPositions } from "../../hooks/api/useStakingPositions"
 import useERC20 from "../../hooks/useERC20"
-import useSherDistManager from "../../hooks/useSherDistManager"
-import useSherlock from "../../hooks/useSherlock"
+import useSherlock, { StakingTypeEnum } from "../../hooks/useSherlock"
 import useWaitTx from "../../hooks/useWaitTx"
 import { formatAmount } from "../../utils/format"
 import { TxType } from "../../utils/txModalMessages"
 import styles from "./Staking.module.scss"
 import { useNavigate } from "react-router-dom"
 import Options from "../../components/Options/Options"
+import { TokenLockingWithNFTLimit } from "../../contracts"
+import { Button } from "../../components/Button/Button"
 
 /**
  * Available staking periods, in seconds.
@@ -28,95 +29,96 @@ import Options from "../../components/Options/Options"
  */
 
 export const StakingPage: React.FC = () => {
-  const [amount, setAmount] = React.useState<BigNumber>()
-  const [debouncedAmountBN] = useDebounce(amount, 500, {
-    equalityFn: (l, r) => (r ? !!l?.eq(r) : l === undefined),
-  })
-  const [sherRewards, setSherRewards] = React.useState<BigNumber>()
+  const [amount, setAmount] = React.useState<string>()
   const [isLoadingRewards, setIsLoadingRewards] = React.useState(false)
-  const { getStakingPositions, data: stakePositionsData } = useStakingPositions()
+  // const { getStakingPositions, data: stakePositionsData } = useStakingPositions()
 
-  const { tvl, address, refreshTvl } = useSherlock()
-  const { computeRewards } = useSherDistManager()
-  const { format: formatSHER } = useERC20("SHER")
-  const { format: formatUSDC, balance: usdcBalance } = useERC20("USDC")
+  const { addressOne, addressTwo, stake, unstake, claimRewards, rewardFactor, tokenStaked } = useSherlock()
+  const { format: formatUSDC, balance: usdcBalance, decimals } = useERC20("USDC")
   const { waitForTx } = useWaitTx()
   const accountData = useAccount()
   const navigate = useNavigate()
 
-  /**
-   * Compute staking rewards for current amount and staking period
-   */
-  const handleComputeRewards = React.useCallback(async () => {
-    if (!tvl) return
+  const [stakingType, setStakingType] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
+  const [rewardFactorOne, setRewardFactorOne] = React.useState<BigNumber>()
+  const [rewardFactorTwo, setRewardFactorTwo] = React.useState<BigNumber>()
 
-    if (!debouncedAmountBN) {
-      setSherRewards(undefined)
-      return
-    }
-    setSherRewards(debouncedAmountBN.mul(BigNumber.from(10).pow(10)))
-  }, [debouncedAmountBN, tvl])
+  React.useEffect(() => {
+    rewardFactor(StakingTypeEnum.One).then((value) => setRewardFactorOne(value))
+    rewardFactor(StakingTypeEnum.Two).then((value) => setRewardFactorTwo(value))
+  }, [rewardFactor])
+
+  const sherRewards = BigNumber.from(10)
+
+  // const sherRewards = React.useMemo(() => {
+  //   if (amount && stakingType === StakingTypeEnum.One && rewardFactorOne)
+  //     return BigNumber.from(amount).mul(rewardFactorOne)
+  //   else if (amount && stakingType === StakingTypeEnum.Two && rewardFactorTwo)
+  //     return BigNumber.from(amount).mul(rewardFactorTwo)
+  //   else return undefined
+  // }, [stakingType, rewardFactorOne, rewardFactorTwo, amount])
+
+  const [stakedAmount, setStakedAmount] = React.useState<BigNumber>()
+
+  React.useEffect(() => {
+    tokenStaked(stakingType).then((res) => setStakedAmount(res))
+  }, [tokenStaked, stakingType])
 
   /**
    * Stake USDC for a given period of time
    */
   const handleOnStake = React.useCallback(async () => {
-    if (!amount) return
+    if (!amount || isNaN(Number(amount))) return
 
-    // const result = await waitForTx(async () => (await stake(amount, stakingPeriod)) as ethers.ContractTransaction, {
-    //   transactionType: TxType.STAKE,
-    // })
-
-    // Navigate to positions page
-    // navigate("/positions", { state: { refreshAfterBlockNumber: result.blockNumber } })
-  }, [amount])
-
-  // Compute rewards when amount or period is changed
-  React.useEffect(() => {
-    handleComputeRewards()
-  }, [debouncedAmountBN, handleComputeRewards])
-
-  /**
-   * Fetch USDC APY
-   */
-  React.useEffect(() => {
-    getStakingPositions(accountData?.address ?? undefined)
-  }, [getStakingPositions, accountData?.address])
+    const amountBigNum = BigNumber.from(Math.floor(Number(amount) * 100)).pow(decimals - 2)
+    stake(amountBigNum, stakingType)
+    await waitForTx(async () => (await stake(amountBigNum, stakingType)) as ethers.ContractTransaction, {
+      transactionType: TxType.STAKE,
+    })
+  }, [amount, decimals, stakingType, stake, waitForTx])
 
   return (
     <Box>
       <LoadingContainer loading={isLoadingRewards}>
         <Column spacing="m">
           <Title>Deposit</Title>
+          <Options
+            value={stakingType}
+            options={[
+              { label: "15 days", value: StakingTypeEnum.One },
+              { label: "30 days", value: StakingTypeEnum.Two },
+            ]}
+            onChange={(value: StakingTypeEnum) => setStakingType(value)}
+          />
           <Row alignment="space-between">
             <Column>
               <Text>Total Value Locked</Text>
             </Column>
             <Column>
-              {tvl && (
-                <Text strong variant="mono">
-                  ${formatAmount(formatUSDC(tvl))}
-                </Text>
-              )}
+              <Text strong variant="mono">
+                {formatAmount(formatUSDC(BigNumber.from(0)))} USDC
+              </Text>
             </Column>
           </Row>
-          {stakePositionsData && (
+          {stakedAmount && (
             <Row alignment="space-between">
               <Column>
-                <Text>USDC APY</Text>
+                <Text>Staked Amount</Text>
               </Column>
               <Column>
                 <Text strong variant="mono">
-                  {formatAmount(stakePositionsData?.usdcAPY)}%
+                  {formatAmount(formatUSDC(stakedAmount))} USDC
                 </Text>
               </Column>
             </Row>
           )}
+
           <Row className={styles.rewardsContainer}>
             <Column grow={1} spacing="l">
               <TokenInput
-                value={debouncedAmountBN}
-                onChange={setAmount}
+                decimals={decimals}
+                value={amount}
+                setValue={setAmount}
                 token="USDC"
                 placeholder="Choose amount"
                 balance={usdcBalance}
@@ -132,38 +134,62 @@ export const StakingPage: React.FC = () => {
                     </Column>
                     <Column>
                       <Text strong variant="mono">
-                        {formatAmount(formatSHER(sherRewards))} SHER
+                        {formatAmount(formatUSDC(sherRewards))} USDC
                       </Text>
                     </Column>
                   </Row>
-                  {stakePositionsData && (
+                  {
                     <Row alignment="space-between">
                       <Column>
                         <Text>USDC APY</Text>
                       </Column>
                       <Column>
                         <Text strong variant="mono">
-                          {formatAmount(stakePositionsData?.usdcAPY)}%
+                          {formatAmount(1)}%
                         </Text>
                       </Column>
                     </Row>
-                  )}
+                  }
                 </>
               )}
 
-              {amount && sherRewards && (
+              {amount && Number(amount) > 0 && sherRewards && (
                 <Row alignment="center">
                   <ConnectGate>
                     <AllowanceGate
-                      amount={amount}
-                      spender={address}
-                      actionName="Claim"
+                      amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
+                        BigNumber.from(10).pow(decimals - 2)
+                      )}
+                      spender={stakingType === StakingTypeEnum.one ? addressOne : addressTwo}
+                      actionName="Stake"
                       action={handleOnStake}
-                      onSuccess={refreshTvl}
+                      onSuccess={() => setAmount("")}
                     ></AllowanceGate>
                   </ConnectGate>
                 </Row>
               )}
+              <Row alignment="center">
+                <ConnectGate>
+                  <Button
+                    onClick={(event) => {
+                      event.preventDefault()
+                      if (stakedAmount) unstake(stakedAmount, stakingType)
+                    }}
+                    disabled={!stakedAmount || stakedAmount.lte(0)}
+                  >
+                    Unstake
+                  </Button>
+                  <Button
+                    onClick={(event) => {
+                      event.preventDefault()
+                      if (stakedAmount) claimRewards(stakingType)
+                    }}
+                    disabled={!stakedAmount || stakedAmount.lte(0)}
+                  >
+                    Claim Rewards
+                  </Button>
+                </ConnectGate>
+              </Row>
             </Column>
           </Row>
           <Text size="small" className={styles.v1}>

@@ -6,15 +6,15 @@ import NFTImg from "../../assets/images/nfts/key.gif"
 import styles from "./Mint.module.scss"
 import { useAccount, useContract, useSigner } from "wagmi"
 
-import TokenABI from "../../abi/Token.json"
-import { IDropClaimCondition, Token } from "../../contracts/Token"
+import NFTABI from "../../abi/NFT.json"
+import { IDropClaimCondition, NFT } from "../../contracts/NFT"
 
 export const MintPage: React.FC = () => {
   const { data: signer } = useSigner()
   const { isConnected, address } = useAccount()
-  const contract = useContract<Token>({
+  const contract = useContract<NFT>({
     addressOrName: "0x0a1e2B30e23d89EA44669F40C49f2D80E3C9beAA",
-    contractInterface: TokenABI.abi,
+    contractInterface: NFTABI.abi,
     signerOrProvider: signer,
   })
   const [claimCondition, setClaimCondition] = React.useState<IDropClaimCondition.ClaimConditionStructOutput>()

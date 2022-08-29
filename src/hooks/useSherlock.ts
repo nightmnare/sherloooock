@@ -1,39 +1,33 @@
 import React from "react"
 import { useAccount, useContract, useProvider, useSigner } from "wagmi"
-import { Sherlock } from "../contracts"
-import SherlockABI from "../abi/Sherlock.json"
+import { TokenLockingWithNFTLimit } from "../contracts"
+import StakingABI from "../abi/TokenLockingWithNFTLimit.json"
 import { BigNumber } from "ethers"
 import config from "../config"
-
-/**
- * Address of Sherlock contract
- */
-export const SHERLOCK_ADDRESS = config.sherlockAddress
 
 /**
  * React Hook for interacting with Sherlock contract.
  *
  * See https://github.com/sherlock-protocol/sherlock-v2-core
  */
+export enum StakingTypeEnum {
+  "One",
+  "Two",
+}
 const useSherlock = () => {
-  const [tvl, setTvl] = React.useState<BigNumber>()
-
   const provider = useProvider()
   const { data: signerData } = useSigner()
   const accountData = useAccount()
-  const contract: Sherlock = useContract({
-    addressOrName: SHERLOCK_ADDRESS,
+  const contractOne = useContract<TokenLockingWithNFTLimit>({
+    addressOrName: config.stakingOneAddress,
     signerOrProvider: signerData || provider,
-    contractInterface: SherlockABI.abi,
+    contractInterface: StakingABI.abi,
   })
-
-  /**
-   * Fetch Sherlock's Total Value Locked
-   */
-  const refreshTvl = React.useCallback(async () => {
-    const latestTvl = await contract.totalTokenBalanceStakers()
-    setTvl(latestTvl)
-  }, [contract])
+  const contractTwo = useContract<TokenLockingWithNFTLimit>({
+    addressOrName: config.stakingTwoAddress,
+    signerOrProvider: signerData || provider,
+    contractInterface: StakingABI.abi,
+  })
 
   /**
    * Stake USDC
@@ -42,57 +36,73 @@ const useSherlock = () => {
    * @param period Lock time
    */
   const stake = React.useCallback(
-    async (amount: BigNumber, period: number) => {
-      if (!accountData?.address) {
-        return
-      }
-
-      return contract.initialStake(amount, period, accountData?.address)
+    async (amount: BigNumber, type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.Stake(amount)
+      else return contractTwo.Stake(amount)
     },
-    [accountData?.address, contract]
+    [accountData?.address, contractOne, contractTwo]
   )
 
   /**
    * Unsttake and cash out an unlocked position
    */
   const unstake = React.useCallback(
-    async (id: BigNumber) => {
-      return contract.redeemNFT(id)
+    async (amount: BigNumber, type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.Unstake(amount)
+      else return contractTwo.Unstake(amount)
     },
-    [contract]
+    [accountData?.address, contractOne, contractTwo]
   )
 
-  /**
-   * Unsttake and cash out an unlocked position
-   */
-  const restake = React.useCallback(
-    async (id: BigNumber, period: number) => {
-      return contract.ownerRestake(id, period)
+  const claimRewards = React.useCallback(
+    async (type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.claimRewards()
+      else return contractTwo.claimRewards()
     },
-    [contract]
+    [accountData?.address, contractOne, contractTwo]
   )
 
-  /**
-   * Fetch TVL on initialization
-   */
-  React.useEffect(() => {
-    if (!contract || tvl) {
-      return
-    }
+  const checkRewards = React.useCallback(
+    async (type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.CheckRewards(accountData?.address)
+      else return contractTwo.CheckRewards(accountData?.address)
+    },
+    [accountData?.address, contractOne, contractTwo]
+  )
 
-    refreshTvl()
-  }, [contract, tvl, refreshTvl])
+  const tokenStaked = React.useCallback(
+    async (type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.TokensStaked(accountData?.address)
+      else return contractTwo.TokensStaked(accountData?.address)
+    },
+    [accountData?.address, contractOne, contractTwo]
+  )
+
+  const rewardFactor = React.useCallback(
+    async (type: StakingTypeEnum) => {
+      if (type === StakingTypeEnum.One) return contractOne.RewardFactor()
+      else return contractTwo.RewardFactor()
+    },
+    [contractOne, contractTwo]
+  )
 
   return React.useMemo(
     () => ({
-      address: SHERLOCK_ADDRESS,
-      tvl,
-      refreshTvl,
+      addressOne: config.stakingOneAddress,
+      addressTwo: config.stakingTwoAddress,
       stake,
-      restake,
       unstake,
+      claimRewards,
+      checkRewards,
+      tokenStaked,
+      rewardFactor,
     }),
-    [tvl, stake, refreshTvl, restake, unstake]
+    [stake, unstake, claimRewards, checkRewards, tokenStaked, rewardFactor]
   )
 }
 export default useSherlock

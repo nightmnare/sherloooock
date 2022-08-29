@@ -1,16 +1,14 @@
-import React, { useCallback, useEffect } from "react"
-import { BigNumber, ethers } from "ethers"
+import React from "react"
 
 import styles from "./Input.module.scss"
-import useAmountState from "../../hooks/useAmountState"
 
-type InputToken = "SHER" | "USDC"
+type InputToken = "USDC"
 
 export type InputProps = {
   /**
    * onChange event handler
    */
-  onChange?: (value: BigNumber | undefined) => void
+  onChange?: React.ChangeEventHandler<HTMLInputElement>
 
   /**
    * Token
@@ -25,7 +23,7 @@ export type InputProps = {
   /**
    * Input value (if controlled input)
    */
-  value?: BigNumber
+  value?: string
 
   /**
    * Disable input
@@ -34,43 +32,14 @@ export type InputProps = {
 }
 
 export const decimalsByToken: Record<InputToken, number> = {
-  SHER: 18,
-  USDC: 6,
+  USDC: 18,
 }
 
-const decommify = (value: string) => value.replaceAll(",", "")
-
-export const Input: React.FC<InputProps> = ({ onChange, token, placeholder, value, disabled = false }) => {
-  const [amount, amountBN, setAmount, setAmountBN] = useAmountState(decimalsByToken[token])
-
-  useEffect(() => {
-    onChange && onChange(amountBN)
-  }, [amountBN, onChange])
-
-  useEffect(() => {
-    if (value) {
-      setAmountBN(value)
-    }
-  }, [value, setAmountBN])
-
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setAmount(decommify(e.target.value))
-    },
-    [setAmount]
-  )
-
-  const displayPlaceholder = placeholder && (amount === "" || amount === "0")
-
+export const Input: React.FC<InputProps> = ({ onChange, placeholder, value, disabled = false }) => {
   return (
     <div className={styles.inputContainer}>
-      {displayPlaceholder && <span className={styles.placeholder}>{placeholder}</span>}
-      <input
-        className={styles.input}
-        value={ethers.utils.commify(amount)}
-        onChange={handleInputChange}
-        disabled={disabled}
-      />
+      {(value === "" || value === "0") && <span className={styles.placeholder}>{placeholder}</span>}
+      <input className={styles.input} value={value} onChange={onChange} disabled={disabled} type="number" />
     </div>
   )
 }

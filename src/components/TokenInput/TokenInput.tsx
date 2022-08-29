@@ -4,41 +4,40 @@ import cx from "classnames"
 import { formatAmount } from "../../utils/format"
 import { Button } from "../Button/Button"
 import { Input } from "../Input"
-import { decimalsByToken, InputProps } from "../Input/Input"
+import { InputProps } from "../Input/Input"
 import { Column, Row } from "../Layout"
 import { Text } from "../Text"
 import styles from "./TokenInput.module.scss"
 
-type Props = Omit<InputProps, "value"> & {
+type Props = Omit<InputProps, "onChange"> & {
+  decimals: number
   balance?: BigNumber
-  value?: BigNumber
+  setValue: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-const TokenInput: React.FC<Props> = ({ balance, value, ...props }) => {
-  const [controlledValue, setControlledValue] = React.useState<BigNumber>()
+const TokenInput: React.FC<Props> = ({ value, balance, decimals, setValue, ...props }) => {
   const { disabled } = props
 
   const handleSetMax = React.useCallback(() => {
-    if (balance) {
-      // Because we are passing the same BigNumber reference, the input will not update
-      // on a second call with the same value.
-      // We create a new BigNumber instance to workaround it
-      // TODO: Find a better method to copy balance to a new instance
-      setControlledValue(balance?.sub(0))
-    }
-  }, [balance])
-
-  React.useEffect(() => {
-    if (value) {
-      setControlledValue(value)
-    }
-  }, [value])
+    if (balance) setValue(balance.div(BigNumber.from(10).pow(decimals)).toString())
+  }, [balance, setValue, decimals])
 
   return (
     <>
       <Row alignment={["space-between", "center"]} spacing="xl" className={cx({ [styles.disabled]: disabled })}>
         <Column grow={1}>
-          <Input value={controlledValue} {...props} />
+          <Input
+            value={value || ""}
+            onChange={(event) => {
+              event.preventDefault()
+              const numberVal = Math.floor(Number(event.target.value) * 100) / 100
+              const maxVal = (balance?.div(BigNumber.from(10).pow(decimals - 2)).toNumber() || 0) / 100
+              setValue((prev) =>
+                isNaN(numberVal) ? prev : maxVal < numberVal ? maxVal.toString() : numberVal.toString()
+              )
+            }}
+            {...props}
+          />
         </Column>
         <Column grow={0}>
           <Text size="extra-large" strong>
@@ -48,9 +47,7 @@ const TokenInput: React.FC<Props> = ({ balance, value, ...props }) => {
       </Row>
       {balance && !disabled && (
         <Row alignment={["end", "center"]} spacing="m">
-          <Text className={styles.balance}>
-            Balance: {formatAmount(utils.formatUnits(balance, decimalsByToken[props.token]))}
-          </Text>
+          <Text className={styles.balance}>Balance: {formatAmount(utils.formatUnits(balance, decimals))}</Text>
           <Button variant="primary" size="small" onClick={handleSetMax}>
             MAX
           </Button>

@@ -50,28 +50,28 @@ const StakingPosition: React.FC<Props> = ({ id, usdcBalance, sherRewards, lockup
   const [stakingPeriod, setStakingPeriod] = React.useState<number>()
   const isUnlocked = lockupEnd <= new Date()
 
-  const { unstake, restake } = useSherlock()
+  // const { unstake, restake } = useSherlock()
   const { waitForTx } = useWaitTx()
 
   /**
    * Unstake position
    */
-  const handleUnstake = React.useCallback(async () => {
-    const result = await waitForTx(async () => await unstake(id))
-    onUpdate(result.blockNumber)
-  }, [unstake, id, waitForTx, onUpdate])
+  // const handleUnstake = React.useCallback(async () => {
+  //   const result = await waitForTx(async () => await unstake(id))
+  //   onUpdate(result.blockNumber)
+  // }, [unstake, id, waitForTx, onUpdate])
 
   /**
    * Restake position
    */
-  const handleRestake = React.useCallback(async () => {
-    if (!stakingPeriod) {
-      return
-    }
+  // const handleRestake = React.useCallback(async () => {
+  //   if (!stakingPeriod) {
+  //     return
+  //   }
 
-    const result = await waitForTx(async () => await restake(id, stakingPeriod))
-    onUpdate(result.blockNumber)
-  }, [restake, id, stakingPeriod, waitForTx, onUpdate])
+  //   const result = await waitForTx(async () => await restake(id, stakingPeriod))
+  //   onUpdate(result.blockNumber)
+  // }, [restake, id, stakingPeriod, waitForTx, onUpdate])
 
   return (
     <Box>
@@ -123,14 +123,14 @@ const StakingPosition: React.FC<Props> = ({ id, usdcBalance, sherRewards, lockup
           <Column className={styles.container} spacing="m">
             <Row spacing="m">
               <Column grow={1}>
-                <Button variant="secondary" onClick={handleUnstake}>
+                {/* <Button variant="secondary" onClick={handleUnstake}>
                   Unstake
                 </Button>
               </Column>
               <Column grow={1}>
                 <Button variant="primary" onClick={handleRestake} disabled={!stakingPeriod}>
                   Restake
-                </Button>
+                </Button> */}
               </Column>
             </Row>
           </Column>
