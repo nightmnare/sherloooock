@@ -1,7 +1,5 @@
 import { BigNumber, ethers } from "ethers"
 import React from "react"
-import { useDebounce, useDebouncedCallback, useThrottledCallback } from "use-debounce"
-import { useAccount } from "wagmi"
 import AllowanceGate from "../../components/AllowanceGate/AllowanceGate"
 import { Box } from "../../components/Box"
 import ConnectGate from "../../components/ConnectGate/ConnectGate"
@@ -10,16 +8,13 @@ import LoadingContainer from "../../components/LoadingContainer/LoadingContainer
 import { Text } from "../../components/Text"
 import { Title } from "../../components/Title"
 import TokenInput from "../../components/TokenInput/TokenInput"
-import { useStakingPositions } from "../../hooks/api/useStakingPositions"
 import useERC20 from "../../hooks/useERC20"
 import useSherlock, { StakingTypeEnum } from "../../hooks/useSherlock"
 import useWaitTx from "../../hooks/useWaitTx"
 import { formatAmount } from "../../utils/format"
 import { TxType } from "../../utils/txModalMessages"
 import styles from "./Staking.module.scss"
-import { useNavigate } from "react-router-dom"
 import Options from "../../components/Options/Options"
-import { TokenLockingWithNFTLimit } from "../../contracts"
 import { Button } from "../../components/Button/Button"
 
 /**
@@ -33,20 +28,11 @@ export const StakingPage: React.FC = () => {
   const [isLoadingRewards, setIsLoadingRewards] = React.useState(false)
   // const { getStakingPositions, data: stakePositionsData } = useStakingPositions()
 
-  const { addressOne, addressTwo, stake, unstake, claimRewards, rewardFactor, tokenStaked } = useSherlock()
+  const { addressOne, addressTwo, stake, unstake, claimRewards, tokenStaked } = useSherlock()
   const { format: formatUSDC, balance: usdcBalance, decimals } = useERC20("USDC")
   const { waitForTx } = useWaitTx()
-  const accountData = useAccount()
-  const navigate = useNavigate()
 
   const [stakingType, setStakingType] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
-  const [rewardFactorOne, setRewardFactorOne] = React.useState<BigNumber>()
-  const [rewardFactorTwo, setRewardFactorTwo] = React.useState<BigNumber>()
-
-  React.useEffect(() => {
-    rewardFactor(StakingTypeEnum.One).then((value) => setRewardFactorOne(value))
-    rewardFactor(StakingTypeEnum.Two).then((value) => setRewardFactorTwo(value))
-  }, [rewardFactor])
 
   const sherRewards = BigNumber.from(10)
 
@@ -137,18 +123,6 @@ export const StakingPage: React.FC = () => {
                       </Text>
                     </Column>
                   </Row>
-                  {
-                    <Row alignment="space-between">
-                      <Column>
-                        <Text>USDC APY</Text>
-                      </Column>
-                      <Column>
-                        <Text strong variant="mono">
-                          {formatAmount(1)}%
-                        </Text>
-                      </Column>
-                    </Row>
-                  }
                 </>
               )}
 
@@ -167,35 +141,39 @@ export const StakingPage: React.FC = () => {
                   </ConnectGate>
                 </Row>
               )}
-              <Row alignment="center">
+              <Row alignment="space-around">
                 <ConnectGate>
-                  <Button
-                    onClick={(event) => {
-                      event.preventDefault()
-                      if (stakedAmount)
-                        waitForTx(
-                          async () => (await unstake(stakedAmount, stakingType)) as ethers.ContractTransaction,
-                          {
-                            transactionType: TxType.UNSTAKE,
-                          }
-                        )
-                    }}
-                    disabled={!stakedAmount || stakedAmount.lte(0)}
-                  >
-                    Unstake
-                  </Button>
-                  <Button
-                    onClick={(event) => {
-                      event.preventDefault()
-                      if (stakedAmount)
-                        waitForTx(async () => (await claimRewards(stakingType)) as ethers.ContractTransaction, {
-                          transactionType: TxType.CLAIM_REWARDS,
-                        })
-                    }}
-                    disabled={!stakedAmount || stakedAmount.lte(0)}
-                  >
-                    Claim Rewards
-                  </Button>
+                  <Column>
+                    <Button
+                      onClick={(event) => {
+                        event.preventDefault()
+                        if (stakedAmount)
+                          waitForTx(
+                            async () => (await unstake(stakedAmount, stakingType)) as ethers.ContractTransaction,
+                            {
+                              transactionType: TxType.UNSTAKE,
+                            }
+                          )
+                      }}
+                      disabled={!stakedAmount || stakedAmount.lte(0)}
+                    >
+                      Unstake
+                    </Button>
+                  </Column>
+                  <Column>
+                    <Button
+                      onClick={(event) => {
+                        event.preventDefault()
+                        if (stakedAmount)
+                          waitForTx(async () => (await claimRewards(stakingType)) as ethers.ContractTransaction, {
+                            transactionType: TxType.CLAIM_REWARDS,
+                          })
+                      }}
+                      disabled={!stakedAmount || stakedAmount.lte(0)}
+                    >
+                      Claim Rewards
+                    </Button>
+                  </Column>
                 </ConnectGate>
               </Row>
             </Column>

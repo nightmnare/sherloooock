@@ -1,6 +1,6 @@
 export const routes = {
   Stake: "stake",
-  Positions: "positions",
+  Calculator: "calculator",
   Fundraise: "fundraise",
   FundraiseClaim: "fundraiseclaim",
   Protocols: "protocols",

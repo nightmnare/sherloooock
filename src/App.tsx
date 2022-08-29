@@ -3,7 +3,7 @@ import { Route, Routes, Navigate } from "react-router-dom"
 
 import { FundraisingClaimPage } from "./pages/FundraisingClaim"
 import { StakingPage } from "./pages/Staking"
-import { StakingPositionsPage } from "./pages/StakingPositions"
+import { CalculatorPage } from "./pages/Calculator"
 import { USForbiddenPage } from "./pages/USForbidden"
 import { OverviewPage } from "./pages/Overview"
 import { ProtocolPage } from "./pages/Protocol"
@@ -25,7 +25,7 @@ function App() {
           <Route path={routes.Stake} element={<StakingPage />} />
           <Route path={routes.Overview} element={<OverviewPage />} />
           <Route path={routes.Mint} element={<MintPage />} />
-          <Route path={routes.Positions} element={<StakingPositionsPage />} />
+          <Route path={routes.Calculator} element={<CalculatorPage />} />
           <Route path={routes.FundraiseClaim} element={<FundraisingClaimPage />} />
           <Route path={routes.USForbidden} element={<USForbiddenPage />} />
 

@@ -31,8 +31,8 @@ const AppStakers = () => {
       route: routes.Stake,
     },
     {
-      title: "POSITIONS",
-      route: routes.Positions,
+      title: "CALCULATOR",
+      route: routes.Calculator,
     },
   ]
 
