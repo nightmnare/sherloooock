@@ -1,5 +1,7 @@
 export const routes = {
-  Stake: "stake",
+  StakeSD: "stakesd",
+  StakeUSDC: "stakeusdc",
+  StakeWFTM: "stakewftm",
   Calculator: "calculator",
   Fundraise: "fundraise",
   FundraiseClaim: "fundraiseclaim",

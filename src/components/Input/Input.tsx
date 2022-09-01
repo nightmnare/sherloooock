@@ -1,8 +1,7 @@
 import React from "react"
+import { AvailableERC20Tokens } from "../../hooks/useERC20"
 
 import styles from "./Input.module.scss"
-
-type InputToken = "USDC"
 
 export type InputProps = {
   /**
@@ -13,7 +12,7 @@ export type InputProps = {
   /**
    * Token
    */
-  token: InputToken
+  token: AvailableERC20Tokens
 
   /**
    * Placeholder
@@ -29,10 +28,6 @@ export type InputProps = {
    * Disable input
    */
   disabled?: boolean
-}
-
-export const decimalsByToken: Record<InputToken, number> = {
-  USDC: 18,
 }
 
 export const Input: React.FC<InputProps> = ({ onChange, placeholder, value, disabled = false }) => {

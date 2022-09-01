@@ -4,6 +4,7 @@ import { TokenLockingWithNFTLimit } from "../contracts"
 import StakingABI from "../abi/TokenLockingWithNFTLimit.json"
 import { BigNumber } from "ethers"
 import config from "../config"
+import { AvailableERC20Tokens } from "./useERC20"
 
 /**
  * React Hook for interacting with Sherlock contract.
@@ -14,17 +15,31 @@ export enum StakingTypeEnum {
   "One",
   "Two",
 }
-const useSherlock = () => {
+const StakingContractOneData = {
+  DAI: config.stakingOneAddress,
+  USDC: config.stakingThreeAddress,
+  WFTM: config.stakingFiveAddress,
+}
+
+const StakingContractTwoData = {
+  DAI: config.stakingTwoAddress,
+  USDC: config.stakingFourAddress,
+  WFTM: config.stakingSixAddress,
+}
+
+const useSherlock = (token: AvailableERC20Tokens) => {
+  const addressOne = StakingContractOneData[token]
+  const addressTwo = StakingContractTwoData[token]
   const provider = useProvider()
   const { data: signerData } = useSigner()
   const accountData = useAccount()
   const contractOne = useContract<TokenLockingWithNFTLimit>({
-    addressOrName: config.stakingOneAddress,
+    addressOrName: addressOne,
     signerOrProvider: signerData || provider,
     contractInterface: StakingABI.abi,
   })
   const contractTwo = useContract<TokenLockingWithNFTLimit>({
-    addressOrName: config.stakingTwoAddress,
+    addressOrName: addressTwo,
     signerOrProvider: signerData || provider,
     contractInterface: StakingABI.abi,
   })
@@ -48,7 +63,7 @@ const useSherlock = () => {
    * Unsttake and cash out an unlocked position
    */
   const unstake = React.useCallback(
-    async (amount: BigNumber, type: StakingTypeEnum) => {
+    async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
       if (type === StakingTypeEnum.One) return contractOne.claimAndWithdraw()
       else return contractTwo.claimAndWithdraw()
@@ -93,8 +108,8 @@ const useSherlock = () => {
 
   return React.useMemo(
     () => ({
-      addressOne: config.stakingOneAddress,
-      addressTwo: config.stakingTwoAddress,
+      addressOne,
+      addressTwo,
       stake,
       unstake,
       claimRewards,
@@ -102,7 +117,7 @@ const useSherlock = () => {
       tokenStaked,
       rewardFactor,
     }),
-    [stake, unstake, claimRewards, checkRewards, tokenStaked, rewardFactor]
+    [stake, unstake, claimRewards, checkRewards, tokenStaked, rewardFactor, addressOne, addressTwo]
   )
 }
 export default useSherlock

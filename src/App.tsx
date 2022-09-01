@@ -22,14 +22,16 @@ function App() {
       <Routes>
         {/** Stakers section routes */}
         <Route path="/*" element={<AppStakers />}>
-          <Route path={routes.Stake} element={<StakingPage />} />
+          <Route path={routes.StakeSD} element={<StakingPage token="DAI" />} />
+          <Route path={routes.StakeUSDC} element={<StakingPage token="USDC" />} />
+          <Route path={routes.StakeWFTM} element={<StakingPage token="WFTM" />} />
           <Route path={routes.Overview} element={<OverviewPage />} />
           <Route path={routes.Mint} element={<MintPage />} />
           <Route path={routes.Calculator} element={<CalculatorPage />} />
           <Route path={routes.FundraiseClaim} element={<FundraisingClaimPage />} />
           <Route path={routes.USForbidden} element={<USForbiddenPage />} />
 
-          <Route path="*" element={<Navigate replace to={`/${routes.Stake}`} />} />
+          <Route path="*" element={<Navigate replace to={`/${routes.StakeSD}`} />} />
         </Route>
 
         {/** Protocols section routes */}

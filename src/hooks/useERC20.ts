@@ -11,13 +11,21 @@ import config from "../config"
  * Adding a new token will update type definitions as well.
  */
 const TokenData = {
+  DAI: {
+    contract: config.daiAddress,
+    decimals: 18,
+  },
   USDC: {
     contract: config.usdcAddress,
     decimals: 18,
   },
+  WFTM: {
+    contract: config.wftmAddress,
+    decimals: 18,
+  },
 }
 
-type AvailableERC20Tokens = keyof typeof TokenData
+export type AvailableERC20Tokens = keyof typeof TokenData
 
 /**
  * Hook for interacting with an ERC20 token contract

@@ -27,8 +27,16 @@ const AppStakers = () => {
       route: routes.Mint,
     },
     {
-      title: "STAKE",
-      route: routes.Stake,
+      title: "SD",
+      route: routes.StakeSD,
+    },
+    {
+      title: "USDC",
+      route: routes.StakeUSDC,
+    },
+    {
+      title: "WFTM",
+      route: routes.StakeWFTM,
     },
     {
       title: "CALCULATOR",
