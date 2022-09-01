@@ -135,18 +135,18 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                       </Text>
                     </Column>
                   </Row>
-                  <Row alignment="space-between">
-                    <Column>
-                      <Text>APY</Text>
-                    </Column>
-                    <Column>
-                      <Text strong variant="mono">
-                        {apy} %
-                      </Text>
-                    </Column>
-                  </Row>
                 </>
               )}
+              <Row alignment="space-between">
+                <Column>
+                  <Text>APY</Text>
+                </Column>
+                <Column>
+                  <Text strong variant="mono">
+                    {apy} %
+                  </Text>
+                </Column>
+              </Row>
 
               {amount && Number(amount) > 0 && sherRewards && (
                 <Row alignment="center">

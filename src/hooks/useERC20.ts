@@ -42,13 +42,13 @@ const useERC20 = (token: AvailableERC20Tokens) => {
   const [balance, setBalance] = React.useState<BigNumber>()
   const [allowances, setAllowances] = React.useState<{ [key: string]: BigNumber }>({})
 
-  const provider = useProvider()
+  const provider = useProvider({ chainId: config.networkId })
   const { data: signerData } = useSigner()
   const accountData = useAccount()
 
   const contract: ERC20 = useContract({
     addressOrName: address,
-    signerOrProvider: signerData || provider,
+    signerOrProvider: accountData.isConnected ? signerData : provider,
     contractInterface: ERC20ABI.abi,
   })
 

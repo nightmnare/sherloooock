@@ -30,17 +30,17 @@ const StakingContractTwoData = {
 const useSherlock = (token: AvailableERC20Tokens) => {
   const addressOne = StakingContractOneData[token]
   const addressTwo = StakingContractTwoData[token]
-  const provider = useProvider()
+  const provider = useProvider({ chainId: config.networkId })
   const { data: signerData } = useSigner()
   const accountData = useAccount()
   const contractOne = useContract<TokenLockingWithNFTLimit>({
     addressOrName: addressOne,
-    signerOrProvider: signerData || provider,
+    signerOrProvider: accountData.isConnected ? signerData : provider,
     contractInterface: StakingABI.abi,
   })
   const contractTwo = useContract<TokenLockingWithNFTLimit>({
     addressOrName: addressTwo,
-    signerOrProvider: signerData || provider,
+    signerOrProvider: accountData.isConnected ? signerData : provider,
     contractInterface: StakingABI.abi,
   })
 
