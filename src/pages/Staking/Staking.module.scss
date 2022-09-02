@@ -1,5 +1,9 @@
 @import "../../styles/variables";
 
+.container {
+  width: 600px;
+}
+
 .rewardsContainer {
   background-color: transparentize($color: $primary-green, $amount: 0.7);
   padding: 1em;

@@ -20,7 +20,9 @@ export const CalculatorPage: React.FC = () => {
   const [usdcAmount, setUSDCAmount] = React.useState<string>()
   const [wftmAmount, setWFTMAmount] = React.useState<string>()
 
-  const [stakingType, setStakingType] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
+  const [stakingTypeOne, setStakingTypeOne] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
+  const [stakingTypeTwo, setStakingTypeTwo] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
+  const [stakingTypeThree, setStakingTypeThree] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
 
   const { rewardFactor: DAIRewardFactor } = useSherlock("DAI")
   const { rewardFactor: USDCRewardFactor } = useSherlock("USDC")
@@ -78,12 +80,12 @@ export const CalculatorPage: React.FC = () => {
             </Row>
             <Row spacing="m">
               <Options
-                value={stakingType}
+                value={stakingTypeOne}
                 options={[
                   { label: "15 days", value: StakingTypeEnum.One },
                   { label: "30 days", value: StakingTypeEnum.Two },
                 ]}
-                onChange={(value: StakingTypeEnum) => setStakingType(value)}
+                onChange={(value: StakingTypeEnum) => setStakingTypeOne(value)}
               />
             </Row>
             <Row alignment="space-between">
@@ -95,7 +97,7 @@ export const CalculatorPage: React.FC = () => {
                   {daiAmount &&
                     formatAmount(
                       Number(daiAmount) *
-                        (stakingType === StakingTypeEnum.One ? daiRewardFactorOne : daiRewardFactorTwo)
+                        (stakingTypeOne === StakingTypeEnum.One ? daiRewardFactorOne : daiRewardFactorTwo)
                     )}{" "}
                   DAI
                 </Text>
@@ -120,12 +122,12 @@ export const CalculatorPage: React.FC = () => {
             </Row>
             <Row spacing="m">
               <Options
-                value={stakingType}
+                value={stakingTypeTwo}
                 options={[
                   { label: "15 days", value: StakingTypeEnum.One },
                   { label: "30 days", value: StakingTypeEnum.Two },
                 ]}
-                onChange={(value: StakingTypeEnum) => setStakingType(value)}
+                onChange={(value: StakingTypeEnum) => setStakingTypeTwo(value)}
               />
             </Row>
             <Row alignment="space-between">
@@ -137,7 +139,7 @@ export const CalculatorPage: React.FC = () => {
                   {usdcAmount &&
                     formatAmount(
                       Number(usdcAmount) *
-                        (stakingType === StakingTypeEnum.One ? usdcRewardFactorOne : usdcRewardFactorTwo)
+                        (stakingTypeTwo === StakingTypeEnum.One ? usdcRewardFactorOne : usdcRewardFactorTwo)
                     )}{" "}
                   USDC
                 </Text>
@@ -162,12 +164,12 @@ export const CalculatorPage: React.FC = () => {
             </Row>
             <Row spacing="m">
               <Options
-                value={stakingType}
+                value={stakingTypeThree}
                 options={[
                   { label: "15 days", value: StakingTypeEnum.One },
                   { label: "30 days", value: StakingTypeEnum.Two },
                 ]}
-                onChange={(value: StakingTypeEnum) => setStakingType(value)}
+                onChange={(value: StakingTypeEnum) => setStakingTypeThree(value)}
               />
             </Row>
             <Row alignment="space-between">
@@ -179,7 +181,7 @@ export const CalculatorPage: React.FC = () => {
                   {wftmAmount &&
                     formatAmount(
                       Number(wftmAmount) *
-                        (stakingType === StakingTypeEnum.One ? wftmRewardFactorOne : wftmRewardFactorTwo)
+                        (stakingTypeThree === StakingTypeEnum.One ? wftmRewardFactorOne : wftmRewardFactorTwo)
                     )}{" "}
                   WFTM
                 </Text>

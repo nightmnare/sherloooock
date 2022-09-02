@@ -43,6 +43,10 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
     return Number(amount) * (stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo)
   }, [amount, stakingType, rewardFactorOne, rewardFactorTwo])
 
+  const sherRewards100 = React.useMemo(() => {
+    return 100 * (stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo)
+  }, [amount, stakingType, rewardFactorOne, rewardFactorTwo])
+
   const apy = React.useMemo(() => {
     return Math.round((stakingType === StakingTypeEnum.One ? rewardFactorOne * 24 : rewardFactorTwo * 12) * 100) / 100
   }, [stakingType, rewardFactorOne, rewardFactorTwo])
@@ -75,136 +79,147 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
   }, [amount, decimals, stakingType, stake, waitForTx])
 
   return (
-    <Box>
-      <LoadingContainer loading={isLoadingRewards}>
-        <Column spacing="m">
-          <Title>Deposit</Title>
-          <Options
-            value={stakingType}
-            options={[
-              { label: "15 days", value: StakingTypeEnum.One },
-              { label: "30 days", value: StakingTypeEnum.Two },
-            ]}
-            onChange={(value: StakingTypeEnum) => setStakingType(value)}
-          />
-          <Row alignment="space-between">
-            <Column>
-              <Text>Total Value Locked</Text>
-            </Column>
-            <Column>
-              <Text strong variant="mono">
-                {formatAmount(format(BigNumber.from(0)))} {token}
-              </Text>
-            </Column>
-          </Row>
-          {stakedAmount && (
+    <div className={styles.container}>
+      <Box fullWidth>
+        <LoadingContainer loading={isLoadingRewards}>
+          <Column spacing="m">
+            <Title>Deposit</Title>
             <Row alignment="space-between">
               <Column>
-                <Text>Staked Amount</Text>
+                <Text>Total Value Locked</Text>
               </Column>
               <Column>
                 <Text strong variant="mono">
-                  {formatAmount(format(stakedAmount))} {token}
+                  {formatAmount(format(BigNumber.from("200921000000000000000000")))} {token}
                 </Text>
               </Column>
             </Row>
-          )}
-
-          <Row className={styles.rewardsContainer}>
-            <Column grow={1} spacing="l">
-              <TokenInput
-                decimals={decimals}
-                value={amount}
-                setValue={setAmount}
-                token={token}
-                placeholder="Choose amount"
-                balance={tokenBalance}
-              />
-              {sherRewards > 0 && (
-                <>
-                  <Row>
-                    <hr />
-                  </Row>
-                  <Row alignment="space-between">
-                    <Column>
-                      <Text>SHER Reward</Text>
-                    </Column>
-                    <Column>
-                      <Text strong variant="mono">
-                        {formatAmount(sherRewards)} {token}
-                      </Text>
-                    </Column>
-                  </Row>
-                </>
-              )}
+            <Row alignment="space-between">
+              <Column>
+                <Text>{token} APY</Text>
+              </Column>
+              <Column>
+                <Text strong variant="mono">
+                  {apy} %
+                </Text>
+              </Column>
+            </Row>
+            <Row alignment="space-between">
+              <Column>
+                <Text>Reward per 100 {token}</Text>
+              </Column>
+              <Column>
+                <Text strong variant="mono">
+                  {formatAmount(sherRewards100)} {token}
+                </Text>
+              </Column>
+            </Row>
+            {stakedAmount && (
               <Row alignment="space-between">
                 <Column>
-                  <Text>APY</Text>
+                  <Text>Staked Amount</Text>
                 </Column>
                 <Column>
                   <Text strong variant="mono">
-                    {apy} %
+                    {formatAmount(format(stakedAmount))} {token}
                   </Text>
                 </Column>
               </Row>
+            )}
+            <Row className={styles.rewardsContainer}>
+              <Column grow={1} spacing="l">
+                <TokenInput
+                  decimals={decimals}
+                  value={amount}
+                  setValue={setAmount}
+                  token={token}
+                  placeholder="Choose amount"
+                  balance={tokenBalance}
+                />
+                <Options
+                  value={stakingType}
+                  options={[
+                    { label: "15 days", value: StakingTypeEnum.One },
+                    { label: "30 days", value: StakingTypeEnum.Two },
+                  ]}
+                  onChange={(value: StakingTypeEnum) => setStakingType(value)}
+                />
+                {sherRewards > 0 && (
+                  <>
+                    <Row>
+                      <hr />
+                    </Row>
+                    <Row alignment="space-between">
+                      <Column>
+                        <Text>SHER Reward</Text>
+                      </Column>
+                      <Column>
+                        <Text strong variant="mono">
+                          {formatAmount(sherRewards)} {token}
+                        </Text>
+                      </Column>
+                    </Row>
+                  </>
+                )}
 
-              {amount && Number(amount) > 0 && sherRewards && (
-                <Row alignment="center">
+                {amount && Number(amount) > 0 && sherRewards && (
+                  <Row alignment="center">
+                    <ConnectGate>
+                      <AllowanceGate
+                        amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
+                          BigNumber.from(10).pow(decimals - 2)
+                        )}
+                        spender={stakingType === StakingTypeEnum.One ? addressOne : addressTwo}
+                        actionName="Stake"
+                        action={handleOnStake}
+                        onSuccess={() => setAmount("")}
+                      ></AllowanceGate>
+                    </ConnectGate>
+                  </Row>
+                )}
+                <Row alignment="space-around">
                   <ConnectGate>
-                    <AllowanceGate
-                      amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
-                        BigNumber.from(10).pow(decimals - 2)
-                      )}
-                      spender={stakingType === StakingTypeEnum.One ? addressOne : addressTwo}
-                      actionName="Stake"
-                      action={handleOnStake}
-                      onSuccess={() => setAmount("")}
-                    ></AllowanceGate>
+                    <Column>
+                      <Button
+                        onClick={(event) => {
+                          event.preventDefault()
+                          if (stakedAmount)
+                            waitForTx(async () => (await unstake(stakingType)) as ethers.ContractTransaction, {
+                              transactionType: TxType.UNSTAKE,
+                            })
+                        }}
+                        disabled={!stakedAmount || stakedAmount.lte(0)}
+                      >
+                        Unstake
+                      </Button>
+                    </Column>
+                    <Column>
+                      <Button
+                        onClick={(event) => {
+                          event.preventDefault()
+                          if (stakedAmount)
+                            waitForTx(async () => (await claimRewards(stakingType)) as ethers.ContractTransaction, {
+                              transactionType: TxType.CLAIM_REWARDS,
+                            })
+                        }}
+                        disabled={!stakedAmount || stakedAmount.lte(0)}
+                      >
+                        Claim Rewards
+                      </Button>
+                    </Column>
                   </ConnectGate>
                 </Row>
-              )}
-              <Row alignment="space-around">
-                <ConnectGate>
-                  <Column>
-                    <Button
-                      onClick={(event) => {
-                        event.preventDefault()
-                        if (stakedAmount)
-                          waitForTx(async () => (await unstake(stakingType)) as ethers.ContractTransaction, {
-                            transactionType: TxType.UNSTAKE,
-                          })
-                      }}
-                      disabled={!stakedAmount || stakedAmount.lte(0)}
-                    >
-                      Unstake
-                    </Button>
-                  </Column>
-                  <Column>
-                    <Button
-                      onClick={(event) => {
-                        event.preventDefault()
-                        if (stakedAmount)
-                          waitForTx(async () => (await claimRewards(stakingType)) as ethers.ContractTransaction, {
-                            transactionType: TxType.CLAIM_REWARDS,
-                          })
-                      }}
-                      disabled={!stakedAmount || stakedAmount.lte(0)}
-                    >
-                      Claim Rewards
-                    </Button>
-                  </Column>
-                </ConnectGate>
-              </Row>
-            </Column>
-          </Row>
-          <Text size="small" className={styles.v1}>
-            For the Sherlock V1, please see{" "}
-            <a href="https://v1.sherlock.xyz" rel="noreferrer" target="_blank">
-              https://v1.sherlock.xyz
-            </a>
-          </Text>
-        </Column>
-      </LoadingContainer>
-    </Box>
+              </Column>
+            </Row>
+            <Text size="small" className={styles.v1}>
+              For the Sherlock V1, please see{" "}
+              <a href="https://v1.sherlock.xyz" rel="noreferrer" target="_blank">
+                https://v1.sherlock.xyz
+              </a>
+            </Text>
+          </Column>
+        </LoadingContainer>
+      </Box>
+    </div>
   )
 }
