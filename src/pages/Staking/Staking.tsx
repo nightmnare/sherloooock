@@ -45,7 +45,7 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
 
   const sherRewards100 = React.useMemo(() => {
     return 100 * (stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo)
-  }, [amount, stakingType, rewardFactorOne, rewardFactorTwo])
+  }, [stakingType, rewardFactorOne, rewardFactorTwo])
 
   const apy = React.useMemo(() => {
     return Math.round((stakingType === StakingTypeEnum.One ? rewardFactorOne * 24 : rewardFactorTwo * 12) * 100) / 100
@@ -161,10 +161,9 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                     </Row>
                   </>
                 )}
-
-                {amount && Number(amount) > 0 && sherRewards && (
-                  <Row alignment="center">
-                    <ConnectGate>
+                <ConnectGate>
+                  {amount && Number(amount) > 0 && sherRewards && (
+                    <Row alignment="center">
                       <AllowanceGate
                         amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
                           BigNumber.from(10).pow(decimals - 2)
@@ -174,11 +173,10 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                         action={handleOnStake}
                         onSuccess={() => setAmount("")}
                       ></AllowanceGate>
-                    </ConnectGate>
-                  </Row>
-                )}
-                <Row alignment="space-around">
-                  <ConnectGate>
+                    </Row>
+                  )}
+
+                  <Row alignment="space-around">
                     <Column>
                       <Button
                         onClick={(event) => {
@@ -207,8 +205,8 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                         Claim Rewards
                       </Button>
                     </Column>
-                  </ConnectGate>
-                </Row>
+                  </Row>
+                </ConnectGate>
               </Column>
             </Row>
             <Text size="small" className={styles.v1}>

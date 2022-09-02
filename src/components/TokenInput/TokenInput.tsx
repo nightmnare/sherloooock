@@ -31,11 +31,14 @@ const TokenInput: React.FC<Props> = ({ value, balance, decimals, setValue, ...pr
             onChange={(event) => {
               event.preventDefault()
               const numberVal = Math.floor(Number(event.target.value) * 100) / 100
-              if (!balance) setValue((prev) => (isNaN(numberVal) ? prev : numberVal.toString()))
+              if (!balance)
+                setValue((prev) =>
+                  isNaN(numberVal) ? prev : 9999999999 < numberVal ? "9999999999" : numberVal.toString()
+                )
               else {
                 const maxVal = (balance.div(BigNumber.from(10).pow(decimals - 2)).toNumber() || 0) / 100
                 setValue((prev) =>
-                  isNaN(numberVal) ? prev : maxVal < numberVal ? maxVal.toString() : numberVal.toString()
+                  isNaN(numberVal) ? prev : maxVal < numberVal ? maxVal.toLocaleString() : numberVal.toLocaleString()
                 )
               }
             }}
