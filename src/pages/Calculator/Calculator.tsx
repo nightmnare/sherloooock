@@ -12,11 +12,11 @@ import { formatAmount } from "../../utils/format"
 import { BigNumber } from "ethers"
 
 export const CalculatorPage: React.FC = () => {
-  const { decimals: daiDecimals } = useERC20("DAI")
+  const { decimals: sdDecimals } = useERC20("SD")
   const { decimals: usdcDecimals } = useERC20("USDC")
   const { decimals: wftmDecimals } = useERC20("WFTM")
 
-  const [daiAmount, setDAIAmount] = React.useState<string>()
+  const [sdAmount, setSDAmount] = React.useState<string>()
   const [usdcAmount, setUSDCAmount] = React.useState<string>()
   const [wftmAmount, setWFTMAmount] = React.useState<string>()
 
@@ -24,41 +24,41 @@ export const CalculatorPage: React.FC = () => {
   const [stakingTypeTwo, setStakingTypeTwo] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
   const [stakingTypeThree, setStakingTypeThree] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
 
-  const { rewardFactor: DAIRewardFactor } = useSherlock("DAI")
+  const { rewardFactor: SDRewardFactor } = useSherlock("SD")
   const { rewardFactor: USDCRewardFactor } = useSherlock("USDC")
   const { rewardFactor: WFTMRewardFactor } = useSherlock("WFTM")
 
-  const [daiRewardFactorOne, setDAIRewardFactorOne] = React.useState<number>(0)
-  const [daiRewardFactorTwo, setDAIRewardFactorTwo] = React.useState<number>(0)
+  const [sdRewardFactorOne, setSDRewardFactorOne] = React.useState<number>(0)
+  const [sdRewardFactorTwo, setSDRewardFactorTwo] = React.useState<number>(0)
   const [usdcRewardFactorOne, setUSDCRewardFactorOne] = React.useState<number>(0)
   const [usdcRewardFactorTwo, setUSDCRewardFactorTwo] = React.useState<number>(0)
   const [wftmRewardFactorOne, setWFTMRewardFactorOne] = React.useState<number>(0)
   const [wftmRewardFactorTwo, setWFTMRewardFactorTwo] = React.useState<number>(0)
 
   React.useEffect(() => {
-    DAIRewardFactor(StakingTypeEnum.One).then((value) => {
-      setDAIRewardFactorOne(value.div(BigNumber.from(10).pow(daiDecimals - 3)).toNumber() / 1000)
+    SDRewardFactor(StakingTypeEnum.One).then((value) => {
+      if (value) setSDRewardFactorOne(value.div(BigNumber.from(10).pow(sdDecimals - 3)).toNumber() / 1000)
     })
-    DAIRewardFactor(StakingTypeEnum.Two).then((value) => {
-      setDAIRewardFactorTwo(value.div(BigNumber.from(10).pow(daiDecimals - 3)).toNumber() / 1000)
+    SDRewardFactor(StakingTypeEnum.Two).then((value) => {
+      if (value) setSDRewardFactorTwo(value.div(BigNumber.from(10).pow(sdDecimals - 3)).toNumber() / 1000)
     })
-  }, [DAIRewardFactor, daiDecimals])
+  }, [SDRewardFactor, sdDecimals])
 
   React.useEffect(() => {
     USDCRewardFactor(StakingTypeEnum.One).then((value) => {
-      setUSDCRewardFactorOne(value.div(BigNumber.from(10).pow(usdcDecimals - 3)).toNumber() / 1000)
+      if (value) setUSDCRewardFactorOne(value.div(BigNumber.from(10).pow(usdcDecimals - 3)).toNumber() / 1000)
     })
     USDCRewardFactor(StakingTypeEnum.Two).then((value) => {
-      setUSDCRewardFactorTwo(value.div(BigNumber.from(10).pow(usdcDecimals - 3)).toNumber() / 1000)
+      if (value) setUSDCRewardFactorTwo(value.div(BigNumber.from(10).pow(usdcDecimals - 3)).toNumber() / 1000)
     })
   }, [USDCRewardFactor, usdcDecimals])
 
   React.useEffect(() => {
     WFTMRewardFactor(StakingTypeEnum.One).then((value) => {
-      setWFTMRewardFactorOne(value.div(BigNumber.from(10).pow(wftmDecimals - 3)).toNumber() / 1000)
+      if (value) setWFTMRewardFactorOne(value.div(BigNumber.from(10).pow(wftmDecimals - 3)).toNumber() / 1000)
     })
     WFTMRewardFactor(StakingTypeEnum.Two).then((value) => {
-      setWFTMRewardFactorTwo(value.div(BigNumber.from(10).pow(wftmDecimals - 3)).toNumber() / 1000)
+      if (value) setWFTMRewardFactorTwo(value.div(BigNumber.from(10).pow(wftmDecimals - 3)).toNumber() / 1000)
     })
   }, [WFTMRewardFactor, wftmDecimals])
 
@@ -70,10 +70,10 @@ export const CalculatorPage: React.FC = () => {
             <Row spacing="m">
               <Column grow={1} spacing="m">
                 <TokenInput
-                  decimals={daiDecimals}
-                  value={daiAmount}
-                  setValue={setDAIAmount}
-                  token="DAI"
+                  decimals={sdDecimals}
+                  value={sdAmount}
+                  setValue={setSDAmount}
+                  token="SD"
                   placeholder="Choose amount"
                 ></TokenInput>
               </Column>
@@ -94,12 +94,12 @@ export const CalculatorPage: React.FC = () => {
               </Column>
               <Column>
                 <Text strong variant="mono">
-                  {daiAmount &&
+                  {sdAmount &&
                     formatAmount(
-                      Number(daiAmount) *
-                        (stakingTypeOne === StakingTypeEnum.One ? daiRewardFactorOne : daiRewardFactorTwo)
+                      Number(sdAmount) *
+                        (stakingTypeOne === StakingTypeEnum.One ? sdRewardFactorOne : sdRewardFactorTwo)
                     )}{" "}
-                  DAI
+                  SD
                 </Text>
               </Column>
             </Row>

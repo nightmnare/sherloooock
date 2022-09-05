@@ -9,7 +9,7 @@ export type Config = {
    *
    * See: https://docs.openzeppelin.com/contracts/2.x/api/token/erc20
    */
-  daiAddress: string
+  sdAddress: string
   usdcAddress: string
   wftmAddress: string
   stakingOneAddress: string

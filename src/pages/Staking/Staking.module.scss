@@ -30,3 +30,17 @@
     }
   }
 }
+
+.seven-seg {
+  background: black;
+  width: 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-family: "Seven Segment";
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 40px;
+}

@@ -11,8 +11,8 @@ import config from "../config"
  * Adding a new token will update type definitions as well.
  */
 const TokenData = {
-  DAI: {
-    contract: config.daiAddress,
+  SD: {
+    contract: config.sdAddress,
     decimals: 18,
   },
   USDC: {
@@ -53,6 +53,7 @@ const useERC20 = (token: AvailableERC20Tokens) => {
   })
 
   React.useEffect(() => {
+    if (!contract.provider && !contract.signer) return
     contract.decimals().then((res) => setDecimals(res))
   }, [contract])
 
@@ -60,10 +61,11 @@ const useERC20 = (token: AvailableERC20Tokens) => {
    * Refresh token balance
    */
   const refreshBalance = React.useCallback(async () => {
-    if (!accountData?.address) return
-    const latestBalance = await contract.balanceOf(accountData?.address)
+    if (!contract.signer) return
+    const signerAddress = await contract.signer.getAddress()
+    const latestBalance = await contract.balanceOf(signerAddress)
     setBalance(latestBalance)
-  }, [contract, accountData?.address])
+  }, [contract])
 
   /**
    * Fetch balance of specific address
@@ -100,7 +102,6 @@ const useERC20 = (token: AvailableERC20Tokens) => {
       if (!address || !amount) {
         return
       }
-
       return contract.approve(address, amount)
     },
     [contract]
@@ -120,12 +121,14 @@ const useERC20 = (token: AvailableERC20Tokens) => {
    * Refresh balance on initialization, or on account change
    */
   React.useEffect(() => {
-    if (!accountData?.address) {
-      return
-    }
-
+    if (!accountData?.address) return
     refreshBalance()
   }, [accountData?.address, refreshBalance])
+
+  React.useEffect(() => {
+    if (!accountData?.address) return
+    setAllowances({})
+  }, [accountData?.address])
 
   return React.useMemo(
     () => ({ balance, refreshBalance, getBalanceOf, getAllowance, approve, decimals, format }),

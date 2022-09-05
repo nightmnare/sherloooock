@@ -22,7 +22,7 @@ function App() {
       <Routes>
         {/** Stakers section routes */}
         <Route path="/*" element={<AppStakers />}>
-          <Route path={routes.StakeSD} element={<StakingPage token="DAI" />} />
+          <Route path={routes.StakeSD} element={<StakingPage token="SD" />} />
           <Route path={routes.StakeUSDC} element={<StakingPage token="USDC" />} />
           <Route path={routes.StakeWFTM} element={<StakingPage token="WFTM" />} />
           <Route path={routes.Overview} element={<OverviewPage />} />

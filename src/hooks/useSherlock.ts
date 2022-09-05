@@ -16,13 +16,13 @@ export enum StakingTypeEnum {
   "Two",
 }
 const StakingContractOneData = {
-  DAI: config.stakingOneAddress,
+  SD: config.stakingOneAddress,
   USDC: config.stakingThreeAddress,
   WFTM: config.stakingFiveAddress,
 }
 
 const StakingContractTwoData = {
-  DAI: config.stakingTwoAddress,
+  SD: config.stakingTwoAddress,
   USDC: config.stakingFourAddress,
   WFTM: config.stakingSixAddress,
 }
@@ -92,18 +92,37 @@ const useSherlock = (token: AvailableERC20Tokens) => {
   const tokenStaked = React.useCallback(
     async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.StakedTokens(accountData?.address)
-      else return contractTwo.StakedTokens(accountData?.address)
+      if (type === StakingTypeEnum.One) {
+        if (!contractOne.provider && !contractOne.signer) return
+        return contractOne.StakedTokens(accountData?.address)
+      } else {
+        if (!contractTwo.provider && !contractTwo.signer) return
+        return contractTwo.StakedTokens(accountData?.address)
+      }
     },
     [accountData?.address, contractOne, contractTwo]
   )
 
   const rewardFactor = React.useCallback(
     async (type: StakingTypeEnum) => {
-      if (type === StakingTypeEnum.One) return contractOne.VaultReward()
-      else return contractTwo.VaultReward()
+      if (type === StakingTypeEnum.One) {
+        if (!contractOne.provider && !contractOne.signer) return
+        return contractOne.VaultReward()
+      } else {
+        if (!contractTwo.provider && !contractTwo.signer) return
+        return contractTwo.VaultReward()
+      }
     },
     [contractOne, contractTwo]
+  )
+
+  const checkTime = React.useCallback(
+    async (type: StakingTypeEnum) => {
+      if (!accountData?.address) return
+      if (type === StakingTypeEnum.One) return contractOne.CalculateReward(accountData?.address)
+      else return contractTwo.CalculateReward(accountData?.address)
+    },
+    [accountData?.address, contractOne, contractTwo]
   )
 
   return React.useMemo(

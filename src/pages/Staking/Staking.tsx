@@ -38,13 +38,26 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
 
   const [stakingType, setStakingType] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
 
+  const [timeleft, setTimeleft] = React.useState<number>(86400)
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeleft((_prev) => {
+        if (_prev < 2) clearInterval(interval)
+        return _prev - 1
+      })
+    }, 1000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   const sherRewards = React.useMemo(() => {
     if (!amount) return 0
     return Number(amount) * (stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo)
   }, [amount, stakingType, rewardFactorOne, rewardFactorTwo])
 
-  const sherRewards100 = React.useMemo(() => {
-    return 100 * (stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo)
+  const uintSherRewards = React.useMemo(() => {
+    return stakingType === StakingTypeEnum.One ? rewardFactorOne : rewardFactorTwo
   }, [stakingType, rewardFactorOne, rewardFactorTwo])
 
   const apy = React.useMemo(() => {
@@ -59,10 +72,10 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
 
   React.useEffect(() => {
     rewardFactor(StakingTypeEnum.One).then((value) => {
-      setRewardFactorOne(value.div(BigNumber.from(10).pow(decimals - 3)).toNumber() / 1000)
+      if (value) setRewardFactorOne(value.div(BigNumber.from(10).pow(decimals - 3)).toNumber() / 1000)
     })
     rewardFactor(StakingTypeEnum.Two).then((value) => {
-      setRewardFactorTwo(value.div(BigNumber.from(10).pow(decimals - 3)).toNumber() / 1000)
+      if (value) setRewardFactorTwo(value.div(BigNumber.from(10).pow(decimals - 3)).toNumber() / 1000)
     })
   }, [rewardFactor, decimals])
 
@@ -106,11 +119,11 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
             </Row>
             <Row alignment="space-between">
               <Column>
-                <Text>Reward per 100 {token}</Text>
+                <Text>Reward per 1 {token}</Text>
               </Column>
               <Column>
                 <Text strong variant="mono">
-                  {formatAmount(sherRewards100)} {token}
+                  {formatAmount(uintSherRewards)} {token}
                 </Text>
               </Column>
             </Row>
@@ -128,14 +141,6 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
             )}
             <Row className={styles.rewardsContainer}>
               <Column grow={1} spacing="l">
-                <TokenInput
-                  decimals={decimals}
-                  value={amount}
-                  setValue={setAmount}
-                  token={token}
-                  placeholder="Choose amount"
-                  balance={tokenBalance}
-                />
                 <Options
                   value={stakingType}
                   options={[
@@ -143,6 +148,14 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                     { label: "30 days", value: StakingTypeEnum.Two },
                   ]}
                   onChange={(value: StakingTypeEnum) => setStakingType(value)}
+                />
+                <TokenInput
+                  decimals={decimals}
+                  value={amount}
+                  setValue={setAmount}
+                  token={token}
+                  placeholder="Choose amount"
+                  balance={tokenBalance}
                 />
                 {sherRewards > 0 && (
                   <>
@@ -206,15 +219,23 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                       </Button>
                     </Column>
                   </Row>
+                  <Row alignment={["center", "end"]}>
+                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 86400) % 60) / 10)}</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 86400) % 10}</Text>
+                    <Text>D</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 3600) % 60) / 10)}</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 3600) % 10}</Text>
+                    <Text>H</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 60) % 60) / 10)}</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 60) % 10}</Text>
+                    <Text>M</Text>
+                    <Text className={styles["seven-seg"]}>{Math.floor((timeleft % 60) / 10)}</Text>
+                    <Text className={styles["seven-seg"]}>{timeleft % 10}</Text>
+                    <Text>S</Text>
+                  </Row>
                 </ConnectGate>
               </Column>
             </Row>
-            <Text size="small" className={styles.v1}>
-              For the Sherlock V1, please see{" "}
-              <a href="https://v1.sherlock.xyz" rel="noreferrer" target="_blank">
-                https://v1.sherlock.xyz
-              </a>
-            </Text>
           </Column>
         </LoadingContainer>
       </Box>

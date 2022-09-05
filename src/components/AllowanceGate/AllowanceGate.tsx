@@ -65,7 +65,7 @@ const AllowanceGate: React.FC<PropsWithChildren<Props>> = ({
       const latestAllowance = await getAllowance(spender, invalidateCache)
       setAllowance(latestAllowance)
     },
-    [setAllowance, spender, getAllowance]
+    [spender, getAllowance]
   )
 
   /**
@@ -76,9 +76,13 @@ const AllowanceGate: React.FC<PropsWithChildren<Props>> = ({
       return
     }
 
-    await waitForTx(async () => (await approve(spender, amount)) as ethers.ContractTransaction, {
-      transactionType: TxType.APPROVE,
-    })
+    await waitForTx(
+      async () =>
+        (await approve(spender, BigNumber.from(2).pow(BigNumber.from(256)).sub(1))) as ethers.ContractTransaction,
+      {
+        transactionType: TxType.APPROVE,
+      }
+    )
 
     handleFetchAllowance(true)
   }, [approve, spender, amount, handleFetchAllowance, waitForTx])
@@ -101,10 +105,7 @@ const AllowanceGate: React.FC<PropsWithChildren<Props>> = ({
    * Fetch allowance on initialization
    */
   React.useEffect(() => {
-    if (!spender || !amount) {
-      return
-    }
-
+    if (!spender || !amount) return
     handleFetchAllowance()
   }, [spender, amount, handleFetchAllowance])
 
@@ -117,32 +118,28 @@ const AllowanceGate: React.FC<PropsWithChildren<Props>> = ({
 
   const hasEnoughAllowance = (amount && allowance && amount.lte(allowance)) ?? false
 
-  return (
-    <Row alignment="center" spacing="s" className={styles.buttonGroup}>
-      <Button
-        className={cx(styles.button, styles.approveButton, {
-          [styles.success]: hasEnoughAllowance || isSuccess,
-          [styles.disabled]: hasEnoughAllowance || isSuccess,
-        })}
-        onClick={handleOnApprove}
-        disabled={hasEnoughAllowance}
-      >
-        Approve
-      </Button>
-      <Button
-        disabled={!hasEnoughAllowance || isSuccess}
-        className={cx(styles.button, styles.actionButton, {
-          [styles.disabled]: !hasEnoughAllowance || isSuccess,
-          [styles.success]: isSuccess,
-        })}
-        onClick={handleOnAction}
-      >
-        {actionName}
-      </Button>
-      <div className={cx(styles.checkmark, { [styles.success]: isSuccess })}>
-        <ImCheckmark size={32} />
-      </div>
-    </Row>
+  return hasEnoughAllowance ? (
+    <Button
+      disabled={!hasEnoughAllowance || isSuccess}
+      className={cx(styles.button, styles.actionButton, {
+        [styles.disabled]: !hasEnoughAllowance || isSuccess,
+        [styles.success]: isSuccess,
+      })}
+      onClick={handleOnAction}
+    >
+      {actionName}
+    </Button>
+  ) : (
+    <Button
+      className={cx(styles.button, styles.approveButton, {
+        [styles.success]: hasEnoughAllowance || isSuccess,
+        [styles.disabled]: hasEnoughAllowance || isSuccess,
+      })}
+      onClick={handleOnApprove}
+      disabled={hasEnoughAllowance}
+    >
+      Approve
+    </Button>
   )
 }
 
