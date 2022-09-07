@@ -21,6 +21,7 @@ export interface TokenLockingWithNFTLimitInterface extends utils.Interface {
   contractName: "TokenLockingWithNFTLimit"
   functions: {
     "CalculateReward(address)": FunctionFragment
+    "CalculateTime(address)": FunctionFragment
     "EditLockReward(uint256)": FunctionFragment
     "EditLockingPeriod(uint256)": FunctionFragment
     "EditNFT(address)": FunctionFragment
@@ -39,6 +40,7 @@ export interface TokenLockingWithNFTLimitInterface extends utils.Interface {
   }
 
   encodeFunctionData(functionFragment: "CalculateReward", values: [string]): string
+  encodeFunctionData(functionFragment: "CalculateTime", values: [string]): string
   encodeFunctionData(functionFragment: "EditLockReward", values: [BigNumberish]): string
   encodeFunctionData(functionFragment: "EditLockingPeriod", values: [BigNumberish]): string
   encodeFunctionData(functionFragment: "EditNFT", values: [string]): string
@@ -56,6 +58,7 @@ export interface TokenLockingWithNFTLimitInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "totalStaked", values?: undefined): string
 
   decodeFunctionResult(functionFragment: "CalculateReward", data: BytesLike): Result
+  decodeFunctionResult(functionFragment: "CalculateTime", data: BytesLike): Result
   decodeFunctionResult(functionFragment: "EditLockReward", data: BytesLike): Result
   decodeFunctionResult(functionFragment: "EditLockingPeriod", data: BytesLike): Result
   decodeFunctionResult(functionFragment: "EditNFT", data: BytesLike): Result
@@ -100,6 +103,8 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
 
   functions: {
     CalculateReward(Who: string, overrides?: CallOverrides): Promise<[BigNumber]>
+
+    CalculateTime(YourAddress: string, overrides?: CallOverrides): Promise<[BigNumber]>
 
     EditLockReward(
       HowManyTokens: BigNumberish,
@@ -152,6 +157,8 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
 
   CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
 
+  CalculateTime(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+
   EditLockReward(
     HowManyTokens: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -203,6 +210,8 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
   callStatic: {
     CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
 
+    CalculateTime(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
+
     EditLockReward(HowManyTokens: BigNumberish, overrides?: CallOverrides): Promise<void>
 
     EditLockingPeriod(HowManyBlocks: BigNumberish, overrides?: CallOverrides): Promise<void>
@@ -238,6 +247,8 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
 
   estimateGas: {
     CalculateReward(Who: string, overrides?: CallOverrides): Promise<BigNumber>
+
+    CalculateTime(YourAddress: string, overrides?: CallOverrides): Promise<BigNumber>
 
     EditLockReward(
       HowManyTokens: BigNumberish,
@@ -278,6 +289,8 @@ export interface TokenLockingWithNFTLimit extends BaseContract {
 
   populateTransaction: {
     CalculateReward(Who: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
+
+    CalculateTime(YourAddress: string, overrides?: CallOverrides): Promise<PopulatedTransaction>
 
     EditLockReward(
       HowManyTokens: BigNumberish,

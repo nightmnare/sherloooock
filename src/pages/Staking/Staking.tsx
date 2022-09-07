@@ -29,7 +29,8 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
   const [isLoadingRewards] = React.useState(false)
   // const { getStakingPositions, data: stakePositionsData } = useStakingPositions()
 
-  const { addressOne, addressTwo, stake, unstake, claimRewards, tokenStaked, rewardFactor } = useSherlock(token)
+  const { addressOne, addressTwo, stake, unstake, claimRewards, tokenStaked, rewardFactor, checkTime } =
+    useSherlock(token)
   const { format, balance: tokenBalance, decimals } = useERC20(token)
   const [rewardFactorOne, setRewardFactorOne] = React.useState<number>(0)
   const [rewardFactorTwo, setRewardFactorTwo] = React.useState<number>(0)
@@ -38,18 +39,8 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
 
   const [stakingType, setStakingType] = React.useState<StakingTypeEnum>(StakingTypeEnum.One)
 
-  const [timeleft, setTimeleft] = React.useState<number>(86400)
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeleft((_prev) => {
-        if (_prev < 2) clearInterval(interval)
-        return _prev - 1
-      })
-    }, 1000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  const [timeleft, setTimeleft] = React.useState<number>(0)
+  const [timerStartVal, setTimerStartVal] = React.useState<number>(86400)
 
   const sherRewards = React.useMemo(() => {
     if (!amount) return 0
@@ -66,9 +57,32 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
 
   const [stakedAmount, setStakedAmount] = React.useState<BigNumber>()
 
+  const [reloadFlag, setReloadFlag] = React.useState<boolean>(false)
+
   React.useEffect(() => {
-    tokenStaked(stakingType).then((res) => setStakedAmount(res))
-  }, [tokenStaked, stakingType])
+    tokenStaked(stakingType).then((_amount) => {
+      if (_amount?.gt(0))
+        checkTime(stakingType).then((_timeleft) => {
+          if (_timeleft) {
+            setTimerStartVal((stakingType === StakingTypeEnum.One ? 15 : 30) * 86400 - _timeleft.toNumber())
+          }
+        })
+      setStakedAmount(_amount)
+    })
+  }, [tokenStaked, stakingType, checkTime, reloadFlag])
+
+  React.useEffect(() => {
+    if (timerStartVal > 0) {
+      setTimeleft(timerStartVal)
+      const interval = setInterval(() => {
+        setTimeleft((_prev) => {
+          if (_prev < 2) clearInterval(interval)
+          return _prev - 1
+        })
+      }, 1000)
+      return () => clearInterval(interval)
+    }
+  }, [timerStartVal])
 
   React.useEffect(() => {
     rewardFactor(StakingTypeEnum.One).then((value) => {
@@ -175,7 +189,7 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                   </>
                 )}
                 <ConnectGate>
-                  {amount && Number(amount) > 0 && sherRewards && (
+                  {amount && Number(amount) > 0 && (
                     <Row alignment="center">
                       <AllowanceGate
                         amount={BigNumber.from(Math.floor(Number(amount) * 100)).mul(
@@ -184,7 +198,10 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                         spender={stakingType === StakingTypeEnum.One ? addressOne : addressTwo}
                         actionName="Stake"
                         action={handleOnStake}
-                        onSuccess={() => setAmount("")}
+                        onSuccess={() => {
+                          setAmount("")
+                          setReloadFlag((_prev) => !_prev)
+                        }}
                       ></AllowanceGate>
                     </Row>
                   )}
@@ -199,7 +216,7 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                               transactionType: TxType.UNSTAKE,
                             })
                         }}
-                        disabled={!stakedAmount || stakedAmount.lte(0)}
+                        disabled={!stakedAmount || stakedAmount.lte(0) || timeleft > 0}
                       >
                         Unstake
                       </Button>
@@ -213,25 +230,20 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                               transactionType: TxType.CLAIM_REWARDS,
                             })
                         }}
-                        disabled={!stakedAmount || stakedAmount.lte(0)}
+                        disabled={!stakedAmount || stakedAmount.lte(0) || timeleft > 0}
                       >
                         Claim Rewards
                       </Button>
                     </Column>
                   </Row>
                   <Row alignment={["center", "end"]}>
-                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 86400) % 60) / 10)}</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 86400) % 10}</Text>
-                    <Text>D</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 3600) % 60) / 10)}</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 3600) % 10}</Text>
-                    <Text>H</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor((Math.floor(timeleft / 60) % 60) / 10)}</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor(timeleft / 60) % 10}</Text>
-                    <Text>M</Text>
-                    <Text className={styles["seven-seg"]}>{Math.floor((timeleft % 60) / 10)}</Text>
-                    <Text className={styles["seven-seg"]}>{timeleft % 10}</Text>
-                    <Text>S</Text>
+                    <Text>
+                      {Math.floor((Math.floor(timeleft / 86400) % 60) / 10)}
+                      {Math.floor(timeleft / 86400) % 10} Days {Math.floor((Math.floor(timeleft / 3600) % 60) / 10)}
+                      {Math.floor(timeleft / 3600) % 10} Hours {Math.floor((Math.floor(timeleft / 60) % 60) / 10)}
+                      {Math.floor(timeleft / 60) % 10} Minutes {Math.floor((timeleft % 60) / 10)}
+                      {timeleft % 10} Seconds Left
+                    </Text>
                   </Row>
                 </ConnectGate>
               </Column>

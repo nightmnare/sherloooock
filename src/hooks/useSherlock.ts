@@ -119,8 +119,8 @@ const useSherlock = (token: AvailableERC20Tokens) => {
   const checkTime = React.useCallback(
     async (type: StakingTypeEnum) => {
       if (!accountData?.address) return
-      if (type === StakingTypeEnum.One) return contractOne.CalculateReward(accountData?.address)
-      else return contractTwo.CalculateReward(accountData?.address)
+      if (type === StakingTypeEnum.One) return contractOne.CalculateTime(accountData?.address)
+      else return contractTwo.CalculateTime(accountData?.address)
     },
     [accountData?.address, contractOne, contractTwo]
   )
@@ -135,8 +135,9 @@ const useSherlock = (token: AvailableERC20Tokens) => {
       checkRewards,
       tokenStaked,
       rewardFactor,
+      checkTime,
     }),
-    [stake, unstake, claimRewards, checkRewards, tokenStaked, rewardFactor, addressOne, addressTwo]
+    [stake, unstake, claimRewards, checkRewards, tokenStaked, rewardFactor, checkTime, addressOne, addressTwo]
   )
 }
 export default useSherlock
