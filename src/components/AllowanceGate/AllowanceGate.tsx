@@ -1,11 +1,9 @@
 import { BigNumber, ethers } from "ethers"
 import React, { PropsWithChildren } from "react"
-import { ImCheckmark } from "react-icons/im"
 import useERC20 from "../../hooks/useERC20"
 import useWaitTx from "../../hooks/useWaitTx"
 import { TxType } from "../../utils/txModalMessages"
 import { Button } from "../Button/Button"
-import { Row } from "../Layout"
 import styles from "./AllowanceGate.module.scss"
 import cx from "classnames"
 

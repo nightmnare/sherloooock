@@ -236,15 +236,17 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
                       </Button>
                     </Column>
                   </Row>
-                  <Row alignment={["center", "end"]}>
-                    <Text>
-                      {Math.floor((Math.floor(timeleft / 86400) % 60) / 10)}
-                      {Math.floor(timeleft / 86400) % 10} Days {Math.floor((Math.floor(timeleft / 3600) % 60) / 10)}
-                      {Math.floor(timeleft / 3600) % 10} Hours {Math.floor((Math.floor(timeleft / 60) % 60) / 10)}
-                      {Math.floor(timeleft / 60) % 10} Minutes {Math.floor((timeleft % 60) / 10)}
-                      {timeleft % 10} Seconds Left
-                    </Text>
-                  </Row>
+                  {stakedAmount?.gt(0) && (
+                    <Row alignment={["center", "end"]}>
+                      <Text>
+                        {Math.floor((Math.floor(timeleft / 86400) % 60) / 10)}
+                        {Math.floor(timeleft / 86400) % 10} Days {Math.floor((Math.floor(timeleft / 3600) % 60) / 10)}
+                        {Math.floor(timeleft / 3600) % 10} Hours {Math.floor((Math.floor(timeleft / 60) % 60) / 10)}
+                        {Math.floor(timeleft / 60) % 10} Minutes {Math.floor((timeleft % 60) / 10)}
+                        {timeleft % 10} Seconds Left
+                      </Text>
+                    </Row>
+                  )}
                 </ConnectGate>
               </Column>
             </Row>
