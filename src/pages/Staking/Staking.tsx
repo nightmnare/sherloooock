@@ -117,7 +117,7 @@ export const StakingPage: React.FC<{ token: AvailableERC20Tokens }> = ({ token }
               </Column>
               <Column>
                 <Text strong variant="mono">
-                  {formatAmount(format(BigNumber.from("200921000000000000000000")))} {token}
+                  {formatAmount(format(BigNumber.from("200921").mul(BigNumber.from(10).pow(decimals))))} {token}
                 </Text>
               </Column>
             </Row>
