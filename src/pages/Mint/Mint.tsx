@@ -1,5 +1,6 @@
 import * as React from "react"
 import { Button } from "../../components/Button/Button"
+import { Text } from "../../components/Text"
 import { Column } from "../../components/Layout"
 import NFTImg from "../../assets/images/nfts/key.gif"
 
@@ -18,6 +19,7 @@ export const MintPage: React.FC = () => {
     signerOrProvider: signer,
   })
   const [claimCondition, setClaimCondition] = React.useState<IDropClaimCondition.ClaimConditionStructOutput>()
+  const [balance, setBalance] = React.useState<string>("0")
 
   React.useEffect(() => {
     if (contract.signer) {
@@ -26,6 +28,7 @@ export const MintPage: React.FC = () => {
           setClaimCondition(_cond)
         })
       })
+      contract.signer.getAddress().then((addr) => contract.balanceOf(addr).then((_bal) => setBalance(_bal.toString())))
     }
   }, [contract])
 
@@ -50,6 +53,7 @@ export const MintPage: React.FC = () => {
       <Button onClick={handleMint} disabled={!isConnected}>
         Mint
       </Button>
+      {isConnected && <Text className={styles.balance}>Your Keys: {balance}</Text>}
     </Column>
   )
 }
