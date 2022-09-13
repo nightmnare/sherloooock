@@ -22,7 +22,8 @@ function App() {
       <Routes>
         {/** Stakers section routes */}
         <Route path="/*" element={<AppStakers />}>
-          <Route path={routes.StakeSD} element={<div>Coming Soon...</div>} />
+          0
+          <Route path={routes.StakeSD} element={<div style={{ fontWeight: 700, fontSize: 40 }}>Coming Soon...</div>} />
           <Route path={routes.StakeUSDC} element={<StakingPage token="USDC" />} />
           <Route path={routes.StakeWFTM} element={<StakingPage token="WFTM" />} />
           <Route path={routes.Overview} element={<OverviewPage />} />
@@ -30,7 +31,6 @@ function App() {
           <Route path={routes.Calculator} element={<CalculatorPage />} />
           <Route path={routes.FundraiseClaim} element={<FundraisingClaimPage />} />
           <Route path={routes.USForbidden} element={<USForbiddenPage />} />
-
           <Route path="*" element={<Navigate replace to={`/${routes.StakeSD}`} />} />
         </Route>
 
